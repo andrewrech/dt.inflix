@@ -2,24 +2,26 @@
 #' Return all duplicated rows of a data.table.
 #'
 #' @param dt Data table.
+#' @param by Character vector. Names of columns to test for duplicates.
 #'
 #' @return A data.table of duplicated rows from \code{dt}.
 #'
-#' @import data.table
 #' @export allduplicated
 
-allduplicated <- function(dt, by = NULL)
-{
+allduplicated <- function(dt, by = NULL){
+
+fD <- NULL
+
 if (by %>% is.null) {
-  setkey(dt)
+  data.table::setkey(dt)
   dups <- duplicated(dt)
 }
 if (!by %>% is.null) {
-  setkeyv(dt, cols = by)
+  data.table::setkeyv(dt, cols = by)
   dups <- duplicated(dt, by = by)
   }
 
-dt[, fD := dups | c(tail(dups, -1), FALSE)]
+dt[, fD := dups | c(utils::tail(dups, -1), FALSE)]
 dt_dup <- dt[fD == TRUE]
 dt[, fD := NULL]
 
@@ -37,7 +39,6 @@ return(dt_dup)
 #'
 #' @return A logical vector the same length as \code{vector} of elements matching \code{pattern}.
 #'
-#' @import stringi
 #' @export %likef%
 
 `%likef%` <- function(vector, pattern)
@@ -61,7 +62,6 @@ return(dt_dup)
 #'
 #' @return A vector of elements in \code{vector} matching \code{pattern}.
 #'
-#' @import stringi
 #' @export %include%
 
 `%include%` <- function(vector, pattern)
@@ -86,7 +86,6 @@ return(dt_dup)
 #'
 #' @return A vector of elements in \code{vector} matching \code{pattern}.
 #'
-#' @import stringi
 #' @export %includef%
 
 `%includef%` <- function(vector, pattern)
@@ -110,7 +109,6 @@ return(dt_dup)
 #'
 #' @return A vector of elements in \code{vector} not matching \code{pattern}.
 #'
-#' @import stringi
 #' @export %exclude%
 
 `%exclude%` <- function(vector, pattern)
@@ -136,7 +134,6 @@ return(dt_dup)
 #'
 #' @return A vector of elements in \code{vector} not matching \code{pattern}.
 #'
-#' @import stringi
 #' @export %excludef%
 
 `%excludef%` <- function(vector, pattern)
@@ -160,7 +157,6 @@ return(dt_dup)
 #'
 #' @return A data.table subset of \code{dt} with rows from index \code{rows}.
 #'
-#' @import data.table
 #' @export %withoutrows%
 
 `%withoutrows%` <- function(dt, rows) {
@@ -192,15 +188,13 @@ assign(deparse(substitute(dt)), dt.subset, envir =  parent.frame())
 #'
 #' @return A data.table subset of \code{dt} with column names matching \code{cols}.
 #'
-#' @import data.table
-#' @import magrittr
 #' @export %with%
 
 `%with%` <- function(dt, cols){
 
 dt_cols <- lapply(cols, function(x){
 dt %>% names %include% x
-}) %>% unlist %>% unique %>% na.omit %>% as.vector
+}) %>% unlist %>% unique %>% stats::na.omit %>% as.vector
 
 if (dt_cols %>% length == 0) {
   stop("No columns selected.")
@@ -219,15 +213,13 @@ return(invisible(dt[, .SD, .SDcols = dt_cols]))
 #'
 #' @return A data.table subset of \code{dt} with column names not matching \code{cols}.
 #'
-#' @import data.table
-#' @import magrittr
 #' @export %without%
 
 `%without%` <- function(dt, cols = NULL){
 
 dt_cols <- lapply(cols, function(x){
 dt %>% names %include% x
-}) %>% unlist %>% unique %>% na.omit %>% as.vector
+}) %>% unlist %>% unique %>% stats::na.omit %>% as.vector
 
 if (dt_cols %>% length > 0) dt[, `:=`(dt_cols %>% eval, NULL)]
 
@@ -245,11 +237,11 @@ return(invisible(dt))
 #'
 #' @return A data.table subset of \code{dt} with columns of all \code{NA} or \code{NULL} removed.
 #'
-#' @import data.table
-#' @import magrittr
 #' @export withoutna
 
 `withoutna` <- function(dt){
+
+`.` <- NULL
 
 na_col <- lapply(1:length(dt), function(x){
     if (all(is.na(dt[[x]])) || all(is.null(dt[[x]]))) return(dt %>% names %>% .[x])
@@ -271,15 +263,14 @@ return(invisible(dt))
 #' @param col Column name to chunk by.
 #' @param chunks Number of chunks.
 #'
-#' @import parallel
-#' @import magrittr
-#' @import data.table
 #' @export chunk
 
 chunk <- function(dt, col, chunks = detectCores()){
 
+`.` <- N <- NULL
+
 fn <- deparse(substitute(dt))
-dt %>% setkeyv(col)
+dt %>% data.table::setkeyv(col)
 
 chunk_ids <- dt[, .N, by = get(col)][order(N)]$get %>% split(1:chunks)
 chunkln <- chunk_ids %>% length

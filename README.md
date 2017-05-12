@@ -10,7 +10,9 @@ Additional inflix operators and helper functions to use with the R package `data
 
 ## Installation ##
 
-`devtools::install_github("andrewrech/datatable.inflix.operators")`
+```r
+devtools::install_github("andrewrech/datatable.inflix.operators")
+```
 
 ## Manifest ##
 
@@ -23,7 +25,7 @@ Additional inflix operators and helper functions to use with the R package `data
 * `%withoutrows%`: Remove data.table rows by reference
 * `%with%`: Return data.table with columns matching regexpr
 * `%without%`: Remove columns from a data.table by reference
-* `withoutna`: Remove all(NA/NULL) columns from a data.table
+* `withoutna`: Remove all(NA) or all(NULL) columns from a data.table
 * `chunk`: chunk a data.table to disk using fwrite
 
 ## Bugs ##

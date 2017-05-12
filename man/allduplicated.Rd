@@ -8,6 +8,8 @@ allduplicated(dt, by = NULL)
 }
 \arguments{
 \item{dt}{Data table.}
+
+\item{by}{Character vector. Names of columns to test for duplicates.}
 }
 \value{
 A data.table of duplicated rows from \code{dt}.
