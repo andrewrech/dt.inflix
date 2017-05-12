@@ -2,13 +2,16 @@
 % Please edit documentation in R/datatable.inflix.operators.R
 \name{allduplicated}
 \alias{allduplicated}
-\title{Return all duplicated rows of a data table.}
+\title{Return all duplicated rows of a data.table.}
 \usage{
 allduplicated(dt, by = NULL)
 }
 \arguments{
 \item{dt}{Data table.}
 }
+\value{
+A data.table of duplicated rows from \code{dt}.
+}
 \description{
-Return all duplicated rows of a data table.
+Return all duplicated rows of a data.table.
 }

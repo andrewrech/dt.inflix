@@ -2,7 +2,7 @@
 % Please edit documentation in R/datatable.inflix.operators.R
 \name{\%likef\%}
 \alias{\%likef\%}
-\title{Convenience inflix operator to return logical vector of elements matching fixed pattern.}
+\title{Convenience inflix operator to return logical vector of elements matching a fixed pattern.}
 \usage{
 vector \%likef\% pattern
 }
@@ -11,6 +11,9 @@ vector \%likef\% pattern
 
 \item{pattern}{Pattern.}
 }
+\value{
+A logical vector the same length as \code{vector} of elements matching \code{pattern}.
+}
 \description{
-Convenience inflix operator to return logical vector of elements matching fixed pattern.
+Convenience inflix operator to return logical vector of elements matching a fixed pattern.
 }

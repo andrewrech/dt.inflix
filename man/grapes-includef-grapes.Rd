@@ -2,7 +2,7 @@
 % Please edit documentation in R/datatable.inflix.operators.R
 \name{\%includef\%}
 \alias{\%includef\%}
-\title{Convenience inflix operator to return vector elements matching fixed pattern.}
+\title{Convenience inflix operator to return vector elements matching a fixed pattern.}
 \usage{
 vector \%includef\% pattern
 }
@@ -11,6 +11,9 @@ vector \%includef\% pattern
 
 \item{pattern}{Pattern.}
 }
+\value{
+A vector of elements in \code{vector} matching \code{pattern}.
+}
 \description{
-Convenience inflix operator to return vector elements matching fixed pattern.
+Convenience inflix operator to return vector elements matching a fixed pattern.
 }

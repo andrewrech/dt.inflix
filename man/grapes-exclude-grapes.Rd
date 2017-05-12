@@ -2,7 +2,7 @@
 % Please edit documentation in R/datatable.inflix.operators.R
 \name{\%exclude\%}
 \alias{\%exclude\%}
-\title{Convenience inflix operator to return vector elements excluding regxpr.}
+\title{Convenience inflix operator to return vector elements excluding those matching a regular expression.}
 \usage{
 vector \%exclude\% pattern
 }
@@ -11,6 +11,9 @@ vector \%exclude\% pattern
 
 \item{pattern}{Pattern.}
 }
+\value{
+A vector of elements in \code{vector} not matching \code{pattern}.
+}
 \description{
-Convenience inflix operator to return vector elements excluding regxpr.
+Convenience inflix operator to return vector elements excluding those matching a regular expression.
 }

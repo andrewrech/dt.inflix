@@ -2,11 +2,11 @@
 
 <h1>datatable.inflix.operators</h1>
 
-Additional inflix operators for the R package datatable
+Additional inflix operators for the R package [`data.table`](https://github.com/Rdatatable/data.table)
 
 ## Description ##
 
-Additional inflix operators and helper functions to use with R data.table objects during exploratory data analysis or parallel execution.
+Additional inflix operators and helper functions to use with the R package `data.table` during exploratory data analysis.
 
 ## Installation ##
 

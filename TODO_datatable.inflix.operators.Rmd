@@ -4,12 +4,6 @@ TODO for the `Rech.helper R package`
 
 ## TODO ##
 
-### Development ###
-
-* Determine package scope; probably this is an internal lab package only
-
-### Publication ###
-
-* Add documentation to Github
+* Add examples
 
 ## NOTES ##

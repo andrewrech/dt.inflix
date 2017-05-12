@@ -2,7 +2,7 @@
 % Please edit documentation in R/datatable.inflix.operators.R
 \name{\%include\%}
 \alias{\%include\%}
-\title{Convenience inflix operator to return vector elements matching regxpr.}
+\title{Convenience inflix operator to return vector elements matching a regular expression.}
 \usage{
 vector \%include\% pattern
 }
@@ -11,6 +11,9 @@ vector \%include\% pattern
 
 \item{pattern}{Pattern.}
 }
+\value{
+A vector of elements in \code{vector} matching \code{pattern}.
+}
 \description{
-Convenience inflix operator to return vector elements matching regxpr.
+Convenience inflix operator to return vector elements matching a regular expression.
 }

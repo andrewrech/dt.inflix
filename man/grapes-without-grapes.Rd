@@ -2,15 +2,18 @@
 % Please edit documentation in R/datatable.inflix.operators.R
 \name{\%without\%}
 \alias{\%without\%}
-\title{Remove columns from a data.table by reference}
+\title{Convenience inflix operator to remove columns from a data.table by reference.}
 \usage{
 dt \%without\% cols
 }
 \arguments{
-\item{dt}{A data table.}
+\item{dt}{A data.table.}
 
 \item{cols}{Vector of columns patterns to remove.}
 }
+\value{
+A data.table subset of \code{dt} with column names not matching \code{cols}.
+}
 \description{
-Remove columns from a data.table by reference
+Convenience inflix operator to remove columns from a data.table by reference.
 }

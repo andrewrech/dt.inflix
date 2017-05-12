@@ -2,13 +2,16 @@
 % Please edit documentation in R/datatable.inflix.operators.R
 \name{withoutna}
 \alias{withoutna}
-\title{Remove NA/NULL columns from a data table by reference}
+\title{Convenience inflix operator to remove all(NA) or all(NULL) columns from a data.table by reference}
 \usage{
 withoutna(dt)
 }
 \arguments{
-\item{dt}{A data table.}
+\item{dt}{A data.table.}
+}
+\value{
+A data.table subset of \code{dt} with columns of all \code{NA} or \code{NULL} removed.
 }
 \description{
-Remove columns from a data table if all values are NA or NULL; useful when subsetting.
+Remove columns from a datatable if all values are NA or NULL; useful when subsetting.
 }

@@ -3,6 +3,8 @@
 #'
 #' @param dt Data table.
 #'
+#' @return A data.table of duplicated rows from \code{dt}.
+#'
 #' @import data.table
 #' @export allduplicated
 
@@ -28,10 +30,12 @@ return(dt_dup)
 
 
 ## ---- `%likef%`
-#' Convenience inflix operator to return logical vector of elements matching fixed pattern.
+#' Convenience inflix operator to return logical vector of elements matching a fixed pattern.
 #'
 #' @param vector Vector.
 #' @param pattern Pattern.
+#'
+#' @return A logical vector the same length as \code{vector} of elements matching \code{pattern}.
 #'
 #' @import stringi
 #' @export %likef%
@@ -50,10 +54,12 @@ return(dt_dup)
 
 
 ## ---- `%include%`
-#' Convenience inflix operator to return vector elements matching regexpr.
+#' Convenience inflix operator to return vector elements matching a regular expression.
 #'
 #' @param vector Vector.
 #' @param pattern Pattern.
+#'
+#' @return A vector of elements in \code{vector} matching \code{pattern}.
 #'
 #' @import stringi
 #' @export %include%
@@ -73,10 +79,12 @@ return(dt_dup)
 
 
 ## ---- `%includef%`
-#' Convenience inflix operator to return vector elements matching fixed pattern.
+#' Convenience inflix operator to return vector elements matching a fixed pattern.
 #'
 #' @param vector Vector.
 #' @param pattern Pattern.
+#'
+#' @return A vector of elements in \code{vector} matching \code{pattern}.
 #'
 #' @import stringi
 #' @export %includef%
@@ -95,10 +103,12 @@ return(dt_dup)
 
 
 ## ---- `%exclude%`
-#' Convenience inflix operator to return vector elements excluding regexpr.
+#' Convenience inflix operator to return vector elements excluding those matching a regular expression.
 #'
 #' @param vector Vector.
 #' @param pattern Pattern.
+#'
+#' @return A vector of elements in \code{vector} not matching \code{pattern}.
 #'
 #' @import stringi
 #' @export %exclude%
@@ -119,10 +129,12 @@ return(dt_dup)
 
 
 ## ---- `%excludef%`
-#' Convenience inflix operator to return vector elements excluding fixed pattern.
+#' Convenience inflix operator to return vector elements excluding a fixed pattern.
 #'
 #' @param vector Vector.
 #' @param pattern Pattern.
+#'
+#' @return A vector of elements in \code{vector} not matching \code{pattern}.
 #'
 #' @import stringi
 #' @export %excludef%
@@ -141,10 +153,12 @@ return(dt_dup)
 
 
 ## ---- `%withoutrows%`
-#' Remove data.table without rows matching index.
+#' Convenience inflix operator to remove data.table rows.
 #'
 #' @param dt A data.table.
 #' @param rows Row indicies to delete.
+#'
+#' @return A data.table subset of \code{dt} with rows from index \code{rows}.
 #'
 #' @import data.table
 #' @export %withoutrows%
@@ -171,10 +185,12 @@ assign(deparse(substitute(dt)), dt.subset, envir =  parent.frame())
 
 
 ## ---- `%with%`
-#' Return data.table with columns matching regexpr.
+#' Convenience inflix operator to return a data.table of columns matching a regular expression.
 #'
 #' @param dt A data.table.
 #' @param cols Vector of column patterns to include.
+#'
+#' @return A data.table subset of \code{dt} with column names matching \code{cols}.
 #'
 #' @import data.table
 #' @import magrittr
@@ -196,10 +212,12 @@ return(invisible(dt[, .SD, .SDcols = dt_cols]))
 
 
 ## ---- `%without%`
-#' Remove columns from a data.table by reference.
+#' Convenience inflix operator to remove columns from a data.table by reference.
 #'
 #' @param dt A data.table.
 #' @param cols Vector of columns patterns to remove.
+#'
+#' @return A data.table subset of \code{dt} with column names not matching \code{cols}.
 #'
 #' @import data.table
 #' @import magrittr
@@ -219,11 +237,13 @@ return(invisible(dt))
 
 
 ## ---- withoutna
-#' Remove NA/NULL columns from a datatable by reference
+#' Convenience inflix operator to remove all(NA) or all(NULL) columns from a data.table by reference
 #'
 #' Remove columns from a datatable if all values are NA or NULL; useful when subsetting.
 #'
 #' @param dt A data.table.
+#'
+#' @return A data.table subset of \code{dt} with columns of all \code{NA} or \code{NULL} removed.
 #'
 #' @import data.table
 #' @import magrittr
@@ -244,6 +264,8 @@ return(invisible(dt))
 
 ## ---- chunk
 #' Chunk a datatable to disk for parallel operations
+#'
+#' Write a data.table to disk using \code{data.table::fwrite} in \code{chunks} segemnts. If is often faster to write out large tabular data to disk then read in parallel vs. \code{foreach} or \code{mclapply}
 #'
 #' @param dt A data.table.
 #' @param col Column name to chunk by.

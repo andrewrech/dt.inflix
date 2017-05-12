@@ -2,15 +2,18 @@
 % Please edit documentation in R/datatable.inflix.operators.R
 \name{\%with\%}
 \alias{\%with\%}
-\title{Get dt columns by regexpr.}
+\title{Convenience inflix operator to return a data.table of columns matching a regular expression.}
 \usage{
 dt \%with\% cols
 }
 \arguments{
-\item{dt}{A data table.}
+\item{dt}{A data.table.}
 
 \item{cols}{Vector of column patterns to include.}
 }
+\value{
+A data.table subset of \code{dt} with column names matching \code{cols}.
+}
 \description{
-Get dt columns by regexpr.
+Convenience inflix operator to return a data.table of columns matching a regular expression.
 }

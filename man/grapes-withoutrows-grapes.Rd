@@ -2,15 +2,18 @@
 % Please edit documentation in R/datatable.inflix.operators.R
 \name{\%withoutrows\%}
 \alias{\%withoutrows\%}
-\title{Remove dt rows by reference.}
+\title{Convenience inflix operator to remove data.table rows.}
 \usage{
 dt \%withoutrows\% rows
 }
 \arguments{
-\item{dt}{A data table.}
+\item{dt}{A data.table.}
 
 \item{rows}{Row indicies to delete.}
 }
+\value{
+A data.table subset of \code{dt} with rows from index \code{rows}.
+}
 \description{
-Remove dt rows by reference.
+Convenience inflix operator to remove data.table rows.
 }

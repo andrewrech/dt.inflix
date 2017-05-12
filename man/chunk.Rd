@@ -7,12 +7,12 @@
 chunk(dt, col, chunks = detectCores())
 }
 \arguments{
-\item{dt}{A data table.}
+\item{dt}{A data.table.}
 
 \item{col}{Column name to chunk by.}
 
 \item{chunks}{Number of chunks.}
 }
 \description{
-Chunk a datatable to disk for parallel operations
+Write a data.table to disk using \code{data.table::fwrite} in \code{chunks} segemnts. If is often faster to write out large tabular data to disk then read in parallel vs. \code{foreach} or \code{mclapply}
 }
