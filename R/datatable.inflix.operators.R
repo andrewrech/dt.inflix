@@ -23,6 +23,7 @@ if (!by %>% is.null) {
 
 dt[, fD := dups | c(utils::tail(dups, -1), FALSE)]
 dt_dup <- dt[fD == TRUE]
+dt_dup[, fD := NULL]
 dt[, fD := NULL]
 
 return(dt_dup)
