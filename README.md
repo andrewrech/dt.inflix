@@ -1,20 +1,20 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/flowAutomateR)](http://cran.r-project.org/package=datatable_inflix_operators)
 
-<h1>datatable.inflix.operators</h1>
+# datatable.inflix.operators
 
 Additional inflix operators for the R package [`data.table`](https://github.com/Rdatatable/data.table)
 
-## Description ##
+## Description
 
 Additional inflix operators and helper functions to use with the R package `data.table` during exploratory data analysis.
 
-## Installation ##
+## Installation
 
 ```r
 devtools::install_github("andrewrech/datatable.inflix.operators")
 ```
 
-## Manifest ##
+## Manifest
 
 * `allduplicated`: Return all duplicated rows of a data.table
 * `%likef%`: Return logical vector of elements matching fixed pattern
@@ -28,12 +28,12 @@ devtools::install_github("andrewrech/datatable.inflix.operators")
 * `withoutna`: Remove all(NA) or all(NULL) columns from a data.table
 * `chunk`: chunk a data.table to disk using fwrite
 
-## Bugs ##
+## Bugs
 
-## Authors ##
+## Authors
 
 Andrew J. Rech (andrewrech@gmail.com)
 
-## License ##
+## License
 
 GNU General Public License v3.0
