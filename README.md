@@ -1,6 +1,6 @@
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/flowAutomateR)](http://cran.r-project.org/package=datatable_inflix_operators)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/flowAutomateR)](http://cran.r-project.org/package=dt.inflix)
 
-# datatable.inflix.operators
+# dt.inflix
 
 Additional inflix operators for the R package [`data.table`](https://github.com/Rdatatable/data.table)
 
@@ -11,7 +11,7 @@ Additional inflix operators and helper functions to use with the R package `data
 ## Installation
 
 ```r
-devtools::install_github("andrewrech/datatable.inflix.operators")
+devtools::install_github("andrewrech/dt.inflix")
 ```
 
 ## Manifest

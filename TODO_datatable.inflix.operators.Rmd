@@ -1,9 +1,0 @@
-# TODO Rech.helper
-
-TODO for the `Rech.helper R package`
-
-## TODO
-
-* Add examples
-
-## NOTES
