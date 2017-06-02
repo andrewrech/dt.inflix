@@ -32,7 +32,7 @@ devtools::install_github("andrewrech/dt.inflix")
 
 ## Authors
 
-Andrew J. Rech (andrewrech@gmail.com)
+[Andrew J. Rech](mailto:andrewrech@gmail.com)
 
 ## License
 

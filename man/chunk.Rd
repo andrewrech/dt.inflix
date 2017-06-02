@@ -4,7 +4,7 @@
 \alias{chunk}
 \title{Chunk a datatable to disk for parallel operations}
 \usage{
-chunk(dt, col, chunks = detectCores())
+chunk(dt, col, chunks = parallel::detectCores())
 }
 \arguments{
 \item{dt}{A data.table.}

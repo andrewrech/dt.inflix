@@ -230,7 +230,7 @@ return(invisible(dt))
 
 
 ## ---- withoutna
-#' Convenience inflix operator to remove all(NA) or all(NULL) columns from a data.table by reference
+#' Convenience inflix operator to remove all(NA) or all(NULL) columns from a data.table by reference.
 #'
 #' Remove columns from a datatable if all values are NA or NULL; useful when subsetting.
 #'
@@ -266,7 +266,7 @@ return(invisible(dt))
 #'
 #' @export chunk
 
-chunk <- function(dt, col, chunks = detectCores()){
+chunk <- function(dt, col, chunks = parallel::detectCores()){
 
 `.` <- N <- NULL
 
@@ -278,7 +278,7 @@ chunkln <- chunk_ids %>% length
 
 parallel::mclapply(1:length(chunk_ids), function(x){
 
-fwrite(dt[get(col) %chin% chunk_ids[[x]]], paste0(fn, "_", x, "_chunk.tsv"), sep = "\t")
+data.table::fwrite(dt[get(col) %chin% chunk_ids[[x]]], paste0(fn, "_", x, "_chunk.tsv"), sep = "\t")
 
 return(NULL)
 
