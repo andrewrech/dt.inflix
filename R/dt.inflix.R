@@ -32,7 +32,7 @@ return(dt_dup)
 
 
 
-## ---- `%likef%`
+## -------- `%likef%`
 #' Convenience inflix operator to return logical vector of elements matching a fixed pattern.
 #'
 #' @param vector Vector.
@@ -55,7 +55,7 @@ return(dt_dup)
 
 
 
-## ---- `%include%`
+## -------- `%include%`
 #' Convenience inflix operator to return vector elements matching a regular expression.
 #'
 #' @param vector Vector.
@@ -79,7 +79,7 @@ return(dt_dup)
 
 
 
-## ---- `%includef%`
+## -------- `%includef%`
 #' Convenience inflix operator to return vector elements matching a fixed pattern.
 #'
 #' @param vector Vector.
@@ -102,7 +102,7 @@ return(dt_dup)
 
 
 
-## ---- `%exclude%`
+## -------- `%exclude%`
 #' Convenience inflix operator to return vector elements excluding those matching a regular expression.
 #'
 #' @param vector Vector.
@@ -127,7 +127,7 @@ return(dt_dup)
 
 
 
-## ---- `%excludef%`
+## -------- `%excludef%`
 #' Convenience inflix operator to return vector elements excluding a fixed pattern.
 #'
 #' @param vector Vector.
@@ -150,7 +150,7 @@ return(dt_dup)
 
 
 
-## ---- `%withoutrows%`
+## -------- `%withoutrows%`
 #' Convenience inflix operator to remove data.table rows.
 #'
 #' @param dt A data.table.
@@ -181,7 +181,7 @@ assign(deparse(substitute(dt)), dt.subset, envir =  parent.frame())
 
 
 
-## ---- `%with%`
+## -------- `%with%`
 #' Convenience inflix operator to return a data.table of columns matching a regular expression.
 #'
 #' @param dt A data.table.
@@ -206,7 +206,7 @@ return(invisible(dt[, .SD, .SDcols = dt_cols]))
 
 
 
-## ---- `%without%`
+## -------- `%without%`
 #' Convenience inflix operator to remove columns from a data.table by reference.
 #'
 #' @param dt A data.table.
@@ -229,10 +229,10 @@ return(invisible(dt))
 
 
 
-## ---- withoutna
+## -------- withoutna
 #' Convenience inflix operator to remove all(NA) or all(NULL) columns from a data.table by reference.
 #'
-#' Remove columns from a datatable if all values are NA or NULL; useful when subsetting.
+#' Remove columns from a data table if all values are NA or NULL; useful when subsetting.
 #'
 #' @param dt A data.table.
 #'
@@ -255,34 +255,36 @@ return(invisible(dt))
 
 
 
-## ---- chunk
-#' Chunk a datatable to disk for parallel operations
+## -------- chunk
+#' Chunk a data table to disk for parallel operations
 #'
-#' Write a data.table to disk using \code{data.table::fwrite} in \code{chunks} segemnts. If is often faster to write out large tabular data to disk then read in parallel vs. \code{foreach} or \code{mclapply}
+#' Write a data.table to disk using \code{data.table::fwrite} in \code{chunks} segments. If is often faster to write out large tabular data to disk then read in parallel vs. \code{foreach} or \code{mclapply}
 #'
 #' @param dt A data.table.
-#' @param col Column name to chunk by.
 #' @param chunks Number of chunks.
+#' @param col.names Logical. Write column names?
+#' @param sep Character. Column separator.
 #'
 #' @export chunk
 
-chunk <- function(dt, col, chunks = parallel::detectCores()){
+chunk <- function(dt, col, chunks = parallel::detectCores(),
+                  col.names = TRUE,
+                  sep = "\t"){
 
 `.` <- N <- NULL
 
 fn <- deparse(substitute(dt))
-dt %>% data.table::setkeyv(col)
 
-chunk_ids <- dt[, .N, by = get(col)][order(N)]$get %>% split(1:chunks)
-chunkln <- chunk_ids %>% length
+parallel::mclapply(dt %>% split(1:chunks), function(dt){
 
-parallel::mclapply(1:length(chunk_ids), function(x){
-
-data.table::fwrite(dt[get(col) %chin% chunk_ids[[x]]], paste0(fn, "_", x, "_chunk.tsv"), sep = "\t")
+data.table::fwrite(dt, paste0(fn, "_", x, "_chunk.tsv"),
+                   col.names = col.names,
+                   sep = sep)
 
 return(NULL)
 
-}, mc.cores = chunks)  ## approximate max CPU use
+})
 
 return(NULL)
+
 }

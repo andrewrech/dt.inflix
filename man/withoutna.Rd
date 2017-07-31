@@ -13,5 +13,5 @@ withoutna(dt)
 A data.table subset of \code{dt} with columns of all \code{NA} or \code{NULL} removed.
 }
 \description{
-Remove columns from a datatable if all values are NA or NULL; useful when subsetting.
+Remove columns from a data table if all values are NA or NULL; useful when subsetting.
 }

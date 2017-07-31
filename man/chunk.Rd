@@ -2,17 +2,20 @@
 % Please edit documentation in R/dt.inflix.R
 \name{chunk}
 \alias{chunk}
-\title{Chunk a datatable to disk for parallel operations}
+\title{Chunk a data table to disk for parallel operations}
 \usage{
-chunk(dt, col, chunks = parallel::detectCores())
+chunk(dt, col, chunks = parallel::detectCores(), col.names = TRUE,
+  sep = "\\t")
 }
 \arguments{
 \item{dt}{A data.table.}
 
-\item{col}{Column name to chunk by.}
-
 \item{chunks}{Number of chunks.}
+
+\item{col.names}{Logical. Write column names?}
+
+\item{sep}{Character. Column separator.}
 }
 \description{
-Write a data.table to disk using \code{data.table::fwrite} in \code{chunks} segemnts. If is often faster to write out large tabular data to disk then read in parallel vs. \code{foreach} or \code{mclapply}
+Write a data.table to disk using \code{data.table::fwrite} in \code{chunks} segments. If is often faster to write out large tabular data to disk then read in parallel vs. \code{foreach} or \code{mclapply}
 }

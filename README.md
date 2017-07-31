@@ -1,4 +1,4 @@
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/flowAutomateR)](http://cran.r-project.org/package=dt.inflix)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/dt.inflix)](http://cran.r-project.org/package=dt.inflix) ![](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
 # dt.inflix
 
