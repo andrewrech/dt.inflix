@@ -7,6 +7,11 @@
 #' @return A data.table of duplicated rows from \code{dt}.
 #'
 #' @export allduplicated
+#' @import data.table
+#' @import stringi
+#' @importFrom parallel detectCores mclapply
+#' @importFrom stats na.omit
+#' @importFrom utils tail
 
 allduplicated <- function(dt, by = NULL){
 
