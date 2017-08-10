@@ -1,4 +1,4 @@
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/dt.inflix)](http://cran.r-project.org/package=dt.inflix) ![](https://img.shields.io/badge/build-passing-brightgreen.svg)
+[![Build Status](https://travis-ci.org/andrewrech/dt.inflix.svg?branch=master)](https://travis-ci.org/andrewrech/dt.inflix) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/dt.inflix)](http://cran.r-project.org/package=dt.inflix)
 
 # dt.inflix
 
