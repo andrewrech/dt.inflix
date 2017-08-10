@@ -2,15 +2,17 @@
 
 # dt.inflix
 
-Additional inflix operators for the R package [`data.table`](https://github.com/Rdatatable/data.table)
+Inflix operators for the R package [`data.table`](https://github.com/Rdatatable/data.table)
 
 ## Description
 
-Additional inflix operators and helper functions to use with the R package `data.table` during exploratory data analysis.
+Extra inflix operators and helper functions to use with the R package `data.table` during exploratory data analysis.
 
 ## Installation
 
 ```r
+devtools::install_github("tidyverse/magrittr")  ## Github version is required
+
 devtools::install_github("andrewrech/dt.inflix")
 ```
 
@@ -32,7 +34,7 @@ devtools::install_github("andrewrech/dt.inflix")
 
 ## Authors
 
-[Andrew J. Rech](mailto:andrewrech@gmail.com)
+[Andrew J. Rech](http://info.rech.io)
 
 ## License
 

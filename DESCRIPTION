@@ -1,11 +1,13 @@
 Package: dt.inflix
-Title: What the Package Does (one line, title case)
+Title: Additional inflix operators for the R package data.table
 Version: 0.0.0.9000
-Authors@R: "Andrew J. Rech <andrewrecg@gmail.com> [aut,cre]"
-Description: What the package does (one paragraph).
+Authors@R: "Andrew J. Rech <andrewrech@gmail.com> [aut,cre]"
+Description: Additional inflix operators and helper functions to use with the R package data.table during exploratory data analysis.
 Depends: R (>= 3.4.1)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+RemoteUrl: http://info.rech.io
+Remotes: Rdatatable/data.table
 RoxygenNote: 6.0.1.9000
 Imports: data.table,stringi,parallel,utils

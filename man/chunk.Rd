@@ -4,8 +4,7 @@
 \alias{chunk}
 \title{Chunk a data table to disk for parallel operations}
 \usage{
-chunk(dt, col, chunks = parallel::detectCores(), col.names = TRUE,
-  sep = "\\t")
+chunk(dt, chunks = parallel::detectCores(), col.names = TRUE, sep = "\\t")
 }
 \arguments{
 \item{dt}{A data.table.}
