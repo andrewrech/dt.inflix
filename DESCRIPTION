@@ -3,12 +3,12 @@ Title: Additional inflix operators for the R package data.table
 Version: 0.0.0.9000
 Authors@R: "Andrew J. Rech <andrewrech@gmail.com> [aut, cre]"
 Description: Additional inflix operators and helper functions to use with the R package data.table during exploratory data analysis.
-Depends: R (>= 3.2)
+Depends: R (>= 3.4.0)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RemoteUrl: http://info.rech.io
-Imports: data.table,stringi,parallel,stats,utils,magrittr
+Imports: data.table, stringi, parallel, stats, utils, magrittr
 Remotes: tidyverse/magrittr, Rdatatable/data.table
 LazyLoad: yes
 RoxygenNote: 6.0.1.9000
