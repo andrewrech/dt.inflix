@@ -8,8 +8,9 @@
 #'
 #' @export allduplicated
 #' @import data.table
+#' @import parallel
 #' @import stringi
-#' @importFrom parallel detectCores mclapply
+#' @importFrom magrittr %>% %T>% %$% %<>%
 #' @importFrom stats na.omit
 #' @importFrom utils tail
 

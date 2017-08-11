@@ -1,3 +1,3 @@
-# dt.inflix 0.0.0.9000
+# dt.inflix 0.0.1
 
 * Initial version.
