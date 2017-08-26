@@ -1,9 +1,0 @@
-# TODO dt.inflix
-
-TODO for the `dt.inflix R package`
-
-## TODO
-
-* Add examples
-
-## NOTES

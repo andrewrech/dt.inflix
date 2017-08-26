@@ -10,6 +10,7 @@
 #' @import data.table
 #' @import parallel
 #' @import stringi
+#' @import testthat
 #' @importFrom magrittr %>% %T>% %$% %<>%
 #' @importFrom stats na.omit
 #' @importFrom utils tail
@@ -18,11 +19,11 @@ allduplicated <- function(dt, by = NULL){
 
 fD <- NULL
 
-if (by %>% is.null) {
+if (by %>% is.null){
   data.table::setkey(dt)
   dups <- duplicated(dt)
 }
-if (!by %>% is.null) {
+if (!by %>% is.null){
   data.table::setkeyv(dt, cols = by)
   dups <- duplicated(dt, by = by)
   }
@@ -50,7 +51,7 @@ return(dt_dup)
 
 `%likef%` <- function(vector, pattern)
 {
-    if (is.factor(vector)) {
+    if (is.factor(vector)){
        lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
     }
     else {
@@ -73,7 +74,7 @@ return(dt_dup)
 
 `%include%` <- function(vector, pattern)
 {
-    if (is.factor(vector)) {
+    if (is.factor(vector)){
        lv <- as.integer(vector) %in% stringi::stri_detect_regex(levels(vector), pattern, opts_regex = stringi::stri_opts_regex(case_insensitive = FALSE, comments = TRUE,  error_on_unknown_escapes = TRUE))
     }
     else {
@@ -97,7 +98,7 @@ return(dt_dup)
 
 `%includef%` <- function(vector, pattern)
 {
-    if (is.factor(vector)) {
+    if (is.factor(vector)){
         lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
     }
     else {
@@ -120,7 +121,7 @@ return(dt_dup)
 
 `%exclude%` <- function(vector, pattern)
 {
-    if (is.factor(vector)) {
+    if (is.factor(vector)){
 
        lv <- as.integer(vector) %in% stringi::stri_detect_regex(levels(vector), pattern, opts_regex = stringi::stri_opts_regex(case_insensitive = FALSE, comments = TRUE,  error_on_unknown_escapes = TRUE))
     }
@@ -145,7 +146,7 @@ return(dt_dup)
 
 `%excludef%` <- function(vector, pattern)
 {
-    if (is.factor(vector)) {
+    if (is.factor(vector)){
         lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
     }
     else {
@@ -166,7 +167,7 @@ return(dt_dup)
 #'
 #' @export %withoutrows%
 
-`%withoutrows%` <- function(dt, rows) {
+`%withoutrows%` <- function(dt, rows){
 
   if (rows %>% is.na %>% any | rows %>% is.null %>% any | !rows %>% is.integer) stop("Error in row indicies.")
 
@@ -174,7 +175,7 @@ return(dt_dup)
   cols = names(dt)
   dt.subset <- data.table::data.table(dt[[1]][keep])
   data.table::setnames(dt.subset, cols[1])
-  for (col in cols[2:length(cols)]) {
+  for (col in cols[2:length(cols)]){
     dt.subset[, (col) := dt[[col]][keep]]
     dt[, (col) := NULL]  # delete
   }
@@ -203,7 +204,7 @@ dt_cols <- lapply(cols, function(x){
 dt %>% names %include% x
 }) %>% unlist %>% unique %>% stats::na.omit %>% as.vector
 
-if (dt_cols %>% length == 0) {
+if (dt_cols %>% length == 0){
   stop("No columns selected.")
 }
 return(invisible(dt[, .SD, .SDcols = dt_cols]))
