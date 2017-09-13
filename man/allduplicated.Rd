@@ -17,3 +17,13 @@ A data.table of duplicated rows from \code{dt}.
 \description{
 Return all duplicated rows of a data.table.
 }
+\examples{
+library(magrittr)
+library(data.table)
+library(dt.inflix)
+
+  dt <- data.table::data.table(a = c(1, 1, 1),
+                               b = c(2, 2, 3))
+
+  dt \%>\% allduplicated
+}

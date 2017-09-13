@@ -18,3 +18,15 @@ chunk(dt, chunks = parallel::detectCores(), col.names = TRUE, sep = "\\t")
 \description{
 Write a data.table to disk using \code{data.table::fwrite} in \code{chunks} segments. If is often faster to write out large tabular data to disk then read in parallel vs. \code{foreach} or \code{mclapply}
 }
+\examples{
+\dontrun{
+library(magrittr)
+library(data.table)
+library(dt.inflix)
+
+  dt <- data.table::data.table(a = c(1:1E7),
+                               b = LETTERS[1:20])
+
+  dt \%>\% chunk
+}
+}

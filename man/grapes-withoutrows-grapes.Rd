@@ -17,3 +17,14 @@ A data.table subset of \code{dt} with rows from index \code{rows}.
 \description{
 Convenience inflix operator to remove data.table rows.
 }
+\examples{
+library(magrittr)
+library(data.table)
+library(dt.inflix)
+
+  dt <- data.table::data.table(a = c(1, 1, 1),
+                               b = c(2, 2, 3))
+
+  dt \%withoutrows\% 2
+  print(dt)
+}

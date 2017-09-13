@@ -17,3 +17,11 @@ A logical vector the same length as \code{vector} of elements matching \code{pat
 \description{
 Convenience inflix operator to return logical vector of elements matching a fixed pattern.
 }
+\examples{
+library(magrittr)
+library(dt.inflix)
+
+  v <- c("Apple", "apple", "APPLE")
+
+  v \%likef\% "ap"
+}

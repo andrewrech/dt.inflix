@@ -8,7 +8,15 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RemoteUrl: http://info.rech.io
-Imports: data.table, stringi, parallel, stats, testthat, utils, magrittr
+Imports: data.table,
+                   stringi,
+                   parallel,
+                   stats,
+                   Rdpack,
+                   testthat,
+                   utils,
+                   magrittr
 Remotes: tidyverse/magrittr, Rdatatable/data.table
+RdMacros: Rdpack
 LazyLoad: yes
 RoxygenNote: 6.0.1.9000

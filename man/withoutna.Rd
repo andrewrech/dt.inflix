@@ -15,3 +15,14 @@ A data.table subset of \code{dt} with columns of all \code{NA} or \code{NULL} re
 \description{
 Remove columns from a data table if all values are NA or NULL; useful when subsetting.
 }
+\examples{
+library(magrittr)
+library(data.table)
+library(dt.inflix)
+
+  dt <- data.table::data.table(a = c(1, 1, 1),
+                               b = c(NA, NA, NA))
+
+  dt \%>\% withoutna
+  print(dt)
+}

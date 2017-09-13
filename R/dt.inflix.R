@@ -6,7 +6,7 @@
 #'
 #' @return A data.table of duplicated rows from \code{dt}.
 #'
-#' @example
+#' @examples
 #' library(magrittr)
 #' library(data.table)
 #' library(dt.inflix)
@@ -21,6 +21,7 @@
 #' @import stringi
 #' @import testthat
 #' @importFrom magrittr %>% %T>% %$% %<>%
+#' @importFrom Rdpack reprompt
 #' @importFrom stats na.omit
 #' @importFrom utils tail
 allduplicated <- function(dt, by = NULL){
@@ -55,7 +56,7 @@ return(dt_dup)
 #'
 #' @return A logical vector the same length as \code{vector} of elements matching \code{pattern}.
 #'
-#' @example
+#' @examples
 #' library(magrittr)
 #' library(dt.inflix)
 #'
@@ -84,7 +85,7 @@ return(dt_dup)
 #'
 #' @return A vector of elements in \code{vector} matching \code{pattern}.
 #'
-#' @example
+#' @examples
 #' library(magrittr)
 #' library(dt.inflix)
 #'
@@ -114,7 +115,7 @@ return(dt_dup)
 #'
 #' @return A vector of elements in \code{vector} matching \code{pattern}.
 #'
-#' @example
+#' @examples
 #' library(magrittr)
 #' library(dt.inflix)
 #'
@@ -143,7 +144,7 @@ return(dt_dup)
 #'
 #' @return A vector of elements in \code{vector} not matching \code{pattern}.
 #'
-#' @example
+#' @examples
 #' library(magrittr)
 #' library(dt.inflix)
 #'
@@ -174,7 +175,7 @@ return(dt_dup)
 #'
 #' @return A vector of elements in \code{vector} not matching \code{pattern}.
 #'
-#' @example
+#' @examples
 #' library(magrittr)
 #' library(dt.inflix)
 #'
@@ -204,7 +205,7 @@ return(dt_dup)
 #'
 #' @return A data.table subset of \code{dt} with rows from index \code{rows}.
 #'
-#' @example
+#' @examples
 #' library(magrittr)
 #' library(data.table)
 #' library(dt.inflix)
@@ -245,7 +246,7 @@ assign(deparse(substitute(dt)), dt.subset, envir =  parent.frame())
 #'
 #' @return A data.table subset of \code{dt} with column names matching \code{cols}.
 #'
-#' @example
+#' @examples
 #' library(magrittr)
 #' library(data.table)
 #' library(dt.inflix)
@@ -280,7 +281,7 @@ return(invisible(dt[, .SD, .SDcols = dt_cols]))
 #'
 #' @return A data.table subset of \code{dt} with column names not matching \code{cols}.
 #'
-#' @example
+#' @examples
 #' library(magrittr)
 #' library(data.table)
 #' library(dt.inflix)
@@ -314,7 +315,7 @@ return(invisible(dt))
 #'
 #' @return A data.table subset of \code{dt} with columns of all \code{NA} or \code{NULL} removed.
 #'
-#' @example
+#' @examples
 #' library(magrittr)
 #' library(data.table)
 #' library(dt.inflix)
@@ -351,7 +352,7 @@ return(invisible(dt))
 #' @param col.names Logical. Write column names?
 #' @param sep Character. Column separator.
 #'
-#' @example
+#' @examples
 #'\dontrun{
 #' library(magrittr)
 #' library(data.table)
