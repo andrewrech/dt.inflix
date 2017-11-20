@@ -7,27 +7,24 @@ r:
   - release
   - devel
   - 3.4.0
+r_github_packages:
+  - tidyverse/magrittr
+  - Rdatatable/data.table
+  - r-lib/testthat
+r_packages:
+  - covr
 env:
-  - MC_CORES=2 OMP_NUM_THREADS=2
-warnings_are_errors: false
+  - MC_CORES=2 OMP_NUM_THREADS=2 DISPLAY=:1
+warnings_are_errors: true
 r_check_args: ""
-cache: packages
-before_install:
-    - sudo apt-get install -y libv8-3.14-dev ghostscript libgs-dev
-    - Rscript -e 'install.packages("devtools"); install.packages("testthat")'
 sudo: true
 repos:
   CRAN: https://cloud.r-project.org
-r_packages:
-  - covr
 after_success:
   - Rscript -e 'library(covr); codecov()'
-cache: packages
 notifications:
-  slack:
-    rooms:
-      - svn-group:WwFD9sJdhbUOPdCX9WA329BL#travis-ci
   email:
     on_success: always
     recipients:
       - andrewrech@gmail.com
+      - Leepr@upenn.edu

@@ -1,22 +1,23 @@
 Package: dt.inflix
-Title: Additional inflix operators for the R package data.table
 Version: 0.0.1
-Authors@R: 'Andrew J. Rech <andrewrech@gmail.com> [aut, cre]'
+Title: Additional inflix operators for the R package data.table
 Description: Additional inflix operators and helper functions to use with the R package data.table during exploratory data analysis.
-Depends: R (>= 3.4.0)
+Authors@R: 'Andrew J. Rech <andrewrech@gmail.com> [aut, cre]'
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+ByteCompile: true
 RemoteUrl: http://info.rech.io
-Imports: data.table,
-                   stringi,
+Imports: Rdpack,
+                   data.table,
+                   magrittr,
                    parallel,
                    stats,
-                   Rdpack,
+                   stringi,
                    testthat,
-                   utils,
-                   magrittr
-Remotes: tidyverse/magrittr, Rdatatable/data.table
+                   utils
+Depends: R (>= 3.4.0)
 RdMacros: Rdpack
+biocViews: 
 LazyLoad: yes
 RoxygenNote: 6.0.1.9000

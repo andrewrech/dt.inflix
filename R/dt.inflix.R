@@ -307,7 +307,7 @@ return(invisible(dt))
 
 
 ## ---- withoutna
-#' Convenience inflix operator to remove all(NA) or all(NULL) columns from a data.table by reference.
+#' Convenience inflix operator to remove all(NA) or all(NULL) columns and rows from a data.table by reference.
 #'
 #' Remove columns from a data table if all values are NA or NULL; useful when subsetting.
 #'
@@ -336,6 +336,11 @@ na_col <- lapply(1:length(dt), function(x){
     }) %>% unlist
 
 if (na_col %>% length > 0) dt[, `:=`(na_col %>% eval, NULL)]
+
+dt[, .SD %>% is.na %>% all, by = 1:nrow(dt)]
+
+n_col <- ncol(dt)
+dt %<>% .[rowSums(is.na(dt)) != n_col, ]
 
 return(invisible(dt))
 }

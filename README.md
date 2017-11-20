@@ -9,10 +9,10 @@ Inflix operators for the R package [`data.table`](https://github.com/Rdatatable/
 
 Extra inflix operators and helper functions to use with the R package `data.table` during exploratory data analysis.
 
-## Installation
+## Installation dependencies and `dt.inflix`
 
-```r
-devtools::install_github("andrewrech/dt.inflix")
+```sh
+curl -fsSL http://get.rech.io/install_dt.inflix.sh | sudo sh
 ```
 
 ## Manifest
