@@ -13,6 +13,10 @@ r_github_packages:
   - r-lib/testthat
 r_packages:
   - covr
+bioc_packages:
+  - BiocInstaller
+  - IRanges
+  - GenomicRanges
 env:
   - MC_CORES=2 OMP_NUM_THREADS=2 DISPLAY=:1
 warnings_are_errors: true

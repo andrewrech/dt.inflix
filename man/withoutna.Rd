@@ -2,7 +2,7 @@
 % Please edit documentation in R/dt.inflix.R
 \name{withoutna}
 \alias{withoutna}
-\title{Convenience inflix operator to remove all(NA) or all(NULL) columns and rowsfrom a data.table by reference.}
+\title{Convenience inflix operator to remove all(NA) or all(NULL) columns and rows from a data.table by reference.}
 \usage{
 withoutna(dt)
 }
