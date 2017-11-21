@@ -7,7 +7,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 ByteCompile: true
-RemoteUrl: http://info.rech.io
+RemoteUrl: https://github.com/andrewrech/dt.inflix
 Imports: Rdpack,
                    data.table,
                    magrittr,

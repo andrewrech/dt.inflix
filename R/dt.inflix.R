@@ -384,7 +384,8 @@ parallel::mclapply(splits %>% seq_along, function(x){
   data.table::fwrite(dt[splits[x]],
                    paste0(fn, "_", x, "_chunk.tsv"),
                    col.names = col.names,
-                   sep = sep)
+                   sep = sep,
+                   quote = FALSE)
   return(NULL)
 })
 
