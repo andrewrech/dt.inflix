@@ -14,22 +14,18 @@
 
   echo "Installing dependencies..."
 
-  Rscript -e \
+  Rscript --vanilla -e \
   'install.packages("devtools", repos = "http://cran.us.r-project.org"); devtools::install_github("hadley/devtools"); install.packages("testthat", repos = "http://cran.us.r-project.org")'
 
-  Rscript -e \
+  Rscript --vanilla -e \
   'install.packages("data.table", type = "source", repos = "http://Rdatatable.github.io/data.table")'
 
-  Rscript -e \
+  Rscript --vanilla -e \
   'devtools::install_github(c("tidyverse/magrittr", "andrewrech/dt.inflix"))'
 
 # install dt.inflix
 
   echo "Installing dt.inflix..."
 
-  Rscript -e \
+  Rscript --vanilla -e \
   'devtools::install_github("andrewrech/dt.inflix")'
-
-  echo "Testing dt.inflix..."
-    Rscript -e \
-  'testthat::test_package("dt.inflix")'

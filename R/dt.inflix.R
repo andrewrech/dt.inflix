@@ -24,6 +24,7 @@
 #' @importFrom Rdpack reprompt
 #' @importFrom stats na.omit
 #' @importFrom utils tail
+
 allduplicated <- function(dt, by = NULL){
 
 fD <- NULL
@@ -64,6 +65,7 @@ return(dt_dup)
 #'
 #'   v %likef% "ap"
 #' @export %likef%
+
 `%likef%` <- function(vector, pattern)
 {
     if (is.factor(vector)){
@@ -93,6 +95,7 @@ return(dt_dup)
 #'
 #'   v %include% "(Ap|AP)"
 #' @export %include%
+
 `%include%` <- function(vector, pattern)
 {
     if (is.factor(vector)){
@@ -123,6 +126,7 @@ return(dt_dup)
 #'
 #'   v %include% "Ap"
 #' @export %includef%
+
 `%includef%` <- function(vector, pattern)
 {
     if (is.factor(vector)){
@@ -152,6 +156,7 @@ return(dt_dup)
 #'
 #'   v %exclude% "Ap"
 #' @export %exclude%
+
 `%exclude%` <- function(vector, pattern)
 {
     if (is.factor(vector)){
