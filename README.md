@@ -1,4 +1,4 @@
-[![Build Status](http://get.rech.io/dt.inflix_status.svg)](http://get.rech.io/dt.inflix_status.html) [![codecov.io](https://codecov.io/github/andrewrech/dt.inflix/coverage.svg?branch=master)](https://codecov.io/github/andrewrech/dt.inflix?branch=master) ![](https://img.shields.io/badge/version-0.0.1-blue.svg)
+[![Build Status](http://18.194.224.158:8080/buildStatus/icon?job=dt.inflix)](http://18.194.224.158:8080/job/dt.inflix/lastBuild/consoleFull) [![codecov.io](https://codecov.io/github/andrewrech/dt.inflix/coverage.svg?branch=master)](https://codecov.io/github/andrewrech/dt.inflix?branch=master) ![](https://img.shields.io/badge/version-0.0.1-blue.svg)
 
 
 # dt.inflix
@@ -12,7 +12,7 @@ Extra inflix operators and helper functions to use with the R package `data.tabl
 ## Installation dependencies and `dt.inflix`
 
 ```sh
-curl -fsSL http://get.rech.io/install_dt.inflix.sh | sudo sh
+curl -fsSL http://get.rech.io/dt.inflix.sh | sudo sh
 ```
 
 ## Manifest
