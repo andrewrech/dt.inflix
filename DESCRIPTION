@@ -3,7 +3,7 @@ Version: 0.0.1
 Title: Additional inflix operators for the R package data.table
 Description: Additional inflix operators and helper functions to use with the R package data.table during exploratory data analysis.
 Authors@R: c(
-          person("Andrew", "Rech", email = "andrewrech@gmail.com", role = c("aut", "cre")))
+          person("Andrew", "Rech", email = "rech@rech.io", role = c("aut", "cre")))
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

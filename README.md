@@ -33,7 +33,7 @@ curl -fsSL http://get.rech.io/dt.inflix.sh | sudo sh
 
 ## Authors
 
-[Andrew J. Rech](http://info.rech.io)
+[Andrew J. Rech](http://rech.io)
 
 ## License
 
