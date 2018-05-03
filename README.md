@@ -17,6 +17,7 @@ curl -fsSL http://get.rech.io/dt.inflix.sh | sudo sh
 
 ## Manifest
 
+* `coerce_dt`: Recursively coerce a list to a flat data table, correctly naming columns.
 * `allduplicated`: Return all duplicated rows of a data.table
 * `%likef%`: Return logical vector of elements matching fixed pattern
 * `%include%`: Return vector elements matching regexpr

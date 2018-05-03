@@ -49,6 +49,125 @@ return(dt_dup)
 
 
 
+## ---- coerce_dt
+#' Recursively coerce a list to a flat data table, correctly naming columns.
+#'
+#' @param l List to coerce.
+#' @param ix Numeric vector. Vector of nested indices to extract recursively.
+#'
+#' @return Data table with non-coercible objects elided.
+#' @export coerce_dt
+#'
+
+coerce_dt <- function(l, ix = NULL){
+
+	lname <- ""
+
+	# generate correct flat data table names if possible
+
+		if (!ix %>% is.null)
+			for (i in ix){
+
+				iname <- try(l[i] %>% names %>% .[1])
+				if (!iname %>% is.null &
+		  		  iname %>% class == "character"){
+
+		  			if (lname != "")
+		  				lname <- paste0(lname, "_", iname)
+
+		  			if (lname == "")
+	  				lname <- iname
+		  		}
+
+					l <- l[[i]]
+
+					}
+
+				if (l %>% class %>% .[1] != "list")
+					l <- list(l)
+
+
+	if (!"list" %chin% (l %>% class))
+		stop("l is not a list.")
+
+	dt <- parallel::mclapply(1:length(l), function(i){
+
+		print(i)
+
+		# if a list, recurse
+
+	  if (
+	      (
+	       (l[[i]] %>%
+	       	       class %>%
+	       	       .[1]) == "list") %>%
+	    	any
+	    	){
+
+	  	# set name
+	  		iname <- try(l[i] %>% names %>% .[1])
+
+	  		if (!iname %>% is.null &
+	  		    iname %>% class == "character"){
+
+	  			if (lname != "")
+	  				lname <- paste0(lname, "_", iname)
+
+	  			if (lname == "")
+	  				lname <- iname
+
+	  		}
+
+					return(l[[i]] %>% coerce_dt)
+		  		}
+
+		  #
+	    dt <- try(l[[i]] %>% data.table::as.data.table(keep.rownames = TRUE))
+
+	  	# set name
+		    iname <- try(l[i] %>% names %>% .[1])
+
+				if (dt %>% class %>% .[1] != "data.table" ||
+				    dt %>% nrow == 0 ||
+				    dt %>% length == 0)
+						return(NULL)
+
+		  		if (!iname %>% is.null &
+		  		    iname %>% class == "character"){
+
+		  			if (lname != "")
+		  				lname <- paste0(lname, "_", iname)
+
+		  			if (lname == "")
+		  				lname <- iname
+
+					}
+					dt %>%
+						data.table::setnames(
+               paste0(lname, "_", dt %>% names))
+
+					return(dt)
+
+  	}) %>%
+			  rbindlist(use.names = TRUE, fill = TRUE)
+
+			if (dt %>% class %>% .[1] != "data.table" ||
+			    dt %>% nrow == 0 ||
+			    dt %>% length == 0)
+					return(NULL)
+
+					dt %>% data.table::setnames(
+					   dt %>%
+					   names %>%
+					   stringr::str_replace_all("__", "_") %>%
+					   stringr::str_replace_all("(_|\\.)$", ""))
+					return(dt)
+
+
+}
+
+
+
 ## ---- `%likef%`
 #' Convenience inflix operator to return logical vector of elements matching a fixed pattern.
 #'
