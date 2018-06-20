@@ -54,12 +54,13 @@ return(dt_dup)
 #'
 #' @param l List to coerce.
 #' @param ix Numeric vector. Vector of nested indices to extract recursively.
+#' @param names Logical. Preserve names?
 #'
 #' @return Data table with non-coercible objects elided.
 #' @export coerce_dt
 #'
 
-coerce_dt <- function(l, ix = NULL){
+coerce_dt <- function(l, ix = NULL, names = TRUE){
 
 	lname <- ""
 
@@ -142,6 +143,7 @@ coerce_dt <- function(l, ix = NULL){
 		  				lname <- iname
 
 					}
+				if (!names)
 					dt %>%
 						data.table::setnames(
                paste0(lname, "_", dt %>% names))
