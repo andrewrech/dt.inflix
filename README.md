@@ -1,4 +1,4 @@
-[![codecov.io](https://codecov.io/github/andrewrech/dt.inflix/coverage.svg?branch=master)](https://codecov.io/github/andrewrech/dt.inflix?branch=master) ![](https://img.shields.io/badge/version-0.0.1-blue.svg)
+[![rech.io](https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix_build_status.svg)](https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix.test.txt) [![rech.io](https://img.shields.io/badge/endpoint.svg?url=https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix_coverage.json)](https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix_coverage.html) ![](https://img.shields.io/badge/version-0.0.1-blue.svg)
 
 # dt.inflix
 
