@@ -14,20 +14,13 @@ Extra inflix operators and helper functions to use with the R package `data.tabl
 curl -fsSL http://get.rech.io/dt.inflix.sh | sudo sh
 ```
 
+### Release
+
+* [Latest](https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix_0.0.1.tar.gz)
+
 ## Manifest
 
-- `coerce_dt`: Recursively coerce a list to a flat data table, correctly naming columns.
-- `allduplicated`: Return all duplicated rows of a data.table
-- `%likef%`: Return logical vector of elements matching fixed pattern
-- `%include%`: Return vector elements matching regexpr
-- `%includef%`: Return vector elements matching fixed pattern
-- `%exclude%`: Return vector elements excluding regexpr
-- `%excludef%`: Return vector elements excluding fixed pattern
-- `%withoutrows%`: Remove data.table rows by reference
-- `%with%`: Return data.table with columns matching regexpr
-- `%without%`: Remove columns from a data.table by reference
-- `withoutna`: Remove all(NA) or all(NULL) columns from a data.table
-- `chunk`: chunk a data.table to disk using fwrite
+[`dt.inflix` R package documentation](https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix.pdf)
 
 ## Bugs
 
