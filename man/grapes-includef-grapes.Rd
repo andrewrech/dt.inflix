@@ -17,11 +17,3 @@ A vector of elements in \code{vector} matching \code{pattern}.
 \description{
 Convenience inflix operator to return vector elements matching a fixed pattern.
 }
-\examples{
-library(magrittr)
-library(dt.inflix)
-
-  v <- c("Apple", "apple", "APPLE")
-
-  v \%include\% "Ap"
-}

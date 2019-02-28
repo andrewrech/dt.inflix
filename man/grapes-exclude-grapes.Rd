@@ -17,11 +17,3 @@ A vector of elements in \code{vector} not matching \code{pattern}.
 \description{
 Convenience inflix operator to return vector elements excluding those matching a regular expression.
 }
-\examples{
-library(magrittr)
-library(dt.inflix)
-
-  v <- c("Apple", "apple", "APPLE")
-
-  v \%exclude\% "Ap"
-}

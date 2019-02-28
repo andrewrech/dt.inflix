@@ -6,15 +6,6 @@
 #'
 #' @return A data.table of duplicated rows from \code{dt}.
 #'
-#' @examples
-#' library(magrittr)
-#' library(data.table)
-#' library(dt.inflix)
-#'
-#'   dt <- data.table::data.table(a = c(1, 1, 1),
-#'                                b = c(2, 2, 3))
-#'
-#'   dt %>% allduplicated
 #' @export allduplicated
 #' @import data.table
 #' @import parallel
@@ -178,14 +169,8 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #'
 #' @return A logical vector the same length as \code{vector} of elements matching \code{pattern}.
 #'
-#' @examples
-#' library(magrittr)
-#' library(dt.inflix)
-#'
-#'   v <- c("Apple", "apple", "APPLE")
-#'
-#'   v %likef% "ap"
 #' @export %likef%
+#' @md
 
 `%likef%` <- function(vector, pattern)
 {
@@ -208,14 +193,8 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #'
 #' @return A vector of elements in \code{vector} matching \code{pattern}.
 #'
-#' @examples
-#' library(magrittr)
-#' library(dt.inflix)
-#'
-#'   v <- c("Apple", "apple", "APPLE")
-#'
-#'   v %include% "(Ap|AP)"
 #' @export %include%
+#' @md
 
 `%include%` <- function(vector, pattern)
 {
@@ -239,14 +218,8 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #'
 #' @return A vector of elements in \code{vector} matching \code{pattern}.
 #'
-#' @examples
-#' library(magrittr)
-#' library(dt.inflix)
-#'
-#'   v <- c("Apple", "apple", "APPLE")
-#'
-#'   v %include% "Ap"
 #' @export %includef%
+#' @md
 
 `%includef%` <- function(vector, pattern)
 {
@@ -269,13 +242,6 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #'
 #' @return A vector of elements in \code{vector} not matching \code{pattern}.
 #'
-#' @examples
-#' library(magrittr)
-#' library(dt.inflix)
-#'
-#'   v <- c("Apple", "apple", "APPLE")
-#'
-#'   v %exclude% "Ap"
 #' @export %exclude%
 
 `%exclude%` <- function(vector, pattern)
@@ -301,13 +267,6 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #'
 #' @return A vector of elements in \code{vector} not matching \code{pattern}.
 #'
-#' @examples
-#' library(magrittr)
-#' library(dt.inflix)
-#'
-#'   v <- c("Apple", "apple", "APPLE")
-#'
-#'   v %include% "Ap"
 #' @export %excludef%
 
 `%excludef%` <- function(vector, pattern)
@@ -331,16 +290,6 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #'
 #' @return A data.table subset of \code{dt} with rows from index \code{rows}.
 #'
-#' @examples
-#' library(magrittr)
-#' library(data.table)
-#' library(dt.inflix)
-#'
-#'   dt <- data.table::data.table(a = c(1, 1, 1),
-#'                                b = c(2, 2, 3))
-#'
-#'   dt %withoutrows% 2
-#'   print(dt)
 #' @export %withoutrows%
 
 `%withoutrows%` <- function(dt, rows){
@@ -372,16 +321,6 @@ assign(deparse(substitute(dt)), dt.subset, envir =  parent.frame())
 #'
 #' @return A data.table subset of \code{dt} with column names matching \code{cols}.
 #'
-#' @examples
-#' library(magrittr)
-#' library(data.table)
-#' library(dt.inflix)
-#'
-#'   dt <- data.table::data.table(a = c(1, 1, 1),
-#'                                b = c(2, 2, 3))
-#'
-#'   dto <- dt %with% "b"
-#'   print(dto)
 #' @export %with%
 
 `%with%` <- function(dt, cols){
@@ -407,16 +346,6 @@ return(invisible(dt[, .SD, .SDcols = dt_cols]))
 #'
 #' @return A data.table subset of \code{dt} with column names not matching \code{cols}.
 #'
-#' @examples
-#' library(magrittr)
-#' library(data.table)
-#' library(dt.inflix)
-#'
-#'   dt <- data.table::data.table(a = c(1, 1, 1),
-#'                                b = c(2, 2, 3))
-#'
-#'   dto <- dt %without% "b"
-#'   print(dto)
 #' @export %without%
 
 `%without%` <- function(dt, cols = NULL){
@@ -441,16 +370,6 @@ return(invisible(dt))
 #'
 #' @return A data.table subset of \code{dt} with columns of all \code{NA} or \code{NULL} removed.
 #'
-#' @examples
-#' library(magrittr)
-#' library(data.table)
-#' library(dt.inflix)
-#'
-#'   dt <- data.table::data.table(a = c(1, 1, 1),
-#'                                b = c(NA, NA, NA))
-#'
-#'   dt %>% withoutna
-#'   print(dt)
 #' @export withoutna
 
 withoutna <- function(dt){
@@ -483,17 +402,6 @@ return(invisible(dt))
 #' @param col.names Logical. Write column names?
 #' @param sep Character. Column separator.
 #'
-#' @examples
-#'\dontrun{
-#' library(magrittr)
-#' library(data.table)
-#' library(dt.inflix)
-#'
-#'   dt <- data.table::data.table(a = c(1:1E7),
-#'                                b = LETTERS[1:20])
-#'
-#'   dt %>% chunk
-#'}
 #' @export chunk
 
 chunk <- function(dt, chunks = parallel::detectCores(),

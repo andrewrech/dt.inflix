@@ -4,7 +4,7 @@ Title: Additional Inflix Operators for the R Package Data.table
 Description: Additional inflix operators and helper functions to use with the R package data.table during exploratory data analysis.
 Authors@R: c(
           person("Andrew", "Rech", email = "rech@rech.io", role = c("aut", "cre")))
-License: GPL-3
+License: LGPL-3
 Encoding: UTF-8
 LazyData: true
 RemoteUrl: https://github.com/andrewrech/dt.inflix

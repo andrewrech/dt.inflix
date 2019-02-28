@@ -17,14 +17,3 @@ A data.table subset of \code{dt} with column names matching \code{cols}.
 \description{
 Convenience inflix operator to return a data.table of columns matching a regular expression.
 }
-\examples{
-library(magrittr)
-library(data.table)
-library(dt.inflix)
-
-  dt <- data.table::data.table(a = c(1, 1, 1),
-                               b = c(2, 2, 3))
-
-  dto <- dt \%with\% "b"
-  print(dto)
-}

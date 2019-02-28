@@ -17,14 +17,3 @@ A data.table subset of \code{dt} with column names not matching \code{cols}.
 \description{
 Convenience inflix operator to remove columns from a data.table by reference.
 }
-\examples{
-library(magrittr)
-library(data.table)
-library(dt.inflix)
-
-  dt <- data.table::data.table(a = c(1, 1, 1),
-                               b = c(2, 2, 3))
-
-  dto <- dt \%without\% "b"
-  print(dto)
-}
