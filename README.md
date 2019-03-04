@@ -1,4 +1,4 @@
-[![rech.io](https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix_build_status.svg)](https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix.test.txt) [![rech.io](https://img.shields.io/badge/endpoint.svg?url=https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix_coverage.json)](https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix_coverage.html) ![](https://img.shields.io/badge/version-0.0.1-blue.svg)
+[![rech.io](https://s3.amazonaws.com/get.rech.io/dt.inflix_build_status.svg)](https://s3.amazonaws.com/get.rech.io/dt.inflix.test.txt) [![rech.io](https://img.shields.io/badge/endpoint.svg?url=https://s3.amazonaws.com/get.rech.io/dt.inflix_coverage.json)](https://s3.amazonaws.com/get.rech.io/dt.inflix_coverage.html) ![](https://img.shields.io/badge/version-0.0.1-blue.svg)
 
 # dt.inflix
 
@@ -16,11 +16,11 @@ curl -fsSL http://get.rech.io/dt.inflix.sh | sudo sh
 
 ### Release
 
-* [Latest](https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix_0.0.1.tar.gz)
+* [Latest](https://s3.amazonaws.com/get.rech.io/dt.inflix_0.0.1.tar.gz)
 
 ## Manifest
 
-[`dt.inflix` R package documentation](https://s3.amazonaws.com/ihmvgkpeoiakxlajyewnrgxwtrtyevdmfzgdbjkmquaozqhbfgihmvgkpeoiaka/dt.inflix.pdf)
+[`dt.inflix` R package documentation](https://s3.amazonaws.com/get.rech.io/dt.inflix.pdf)
 
 ## Bugs
 
@@ -30,4 +30,4 @@ curl -fsSL http://get.rech.io/dt.inflix.sh | sudo sh
 
 ## License
 
-GNU General Public License v3.0
+GNU Lesser General Public License v3.0
