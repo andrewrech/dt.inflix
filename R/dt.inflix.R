@@ -360,6 +360,40 @@ return(invisible(dt))
 }
 
 
+## ---- chunk
+#' Data.table::split but with aggregate "chunks".
+#'
+#' `chunk` performs `data.table::split` for a column but returns a list of length `cl`. The purpose of this function is to parallelize over `by` more efficiently when `by` >> `cl`.
+#'
+#' @param dt A data.table.
+#' @param by Column to chunk by.
+#' @param cl Number of chunks.
+#'
+#' @return `cl` data.table chunks with `col` split exclusively
+#'
+#' @export chunk
+
+chunk <- function(dt, by, cl = parallel::detectCores()){
+
+  dt %>% data.table::setkeyv(by)
+
+  levels <- dt[, get(by) %>% unique]
+
+  suppressWarnings(dt[, .vec_chunk := NULL])
+
+  # divide data tables cleanly over by
+
+  .vec_chunk <- rep(1:cl, (length(levels) / cl) %>% ceiling) %>% .[1:length(levels)]
+
+  dt <- data.table::data.table(.vec_chunk, levels) %>%
+        data.table::setnames("levels", by) %>%
+        merge(dt, all = TRUE, by = by)
+
+  return(split(dt, by = ".vec_chunk"))
+
+}
+
+
 
 ## ---- withoutna
 #' Convenience inflix operator to remove all(NA) or all(NULL) columns and rows from a data.table by reference.
@@ -390,39 +424,3 @@ dt %<>% .[rowSums(is.na(dt)) != n_col, ]
 return(invisible(dt))
 }
 
-
-
-## ---- chunk
-#' Chunk a data table to disk for parallel operations
-#'
-#' Write a data.table to disk using \code{data.table::fwrite} in \code{chunks} segments. If is often faster to write out large tabular data to disk then read in parallel vs. \code{foreach} or \code{mclapply}
-#'
-#' @param dt A data.table.
-#' @param chunks Number of chunks.
-#' @param col.names Logical. Write column names?
-#' @param sep Character. Column separator.
-#'
-#' @export chunk
-
-chunk <- function(dt, chunks = parallel::detectCores(),
-                  col.names = TRUE,
-                  sep = "\t"){
-
-`.` <- N <- NULL
-
-fn <- deparse(substitute(dt))
-
-splits <- dt %>% split(1:chunks)
-
-parallel::mclapply(splits %>% seq_along, function(x){
-  data.table::fwrite(dt[splits[x]],
-                   paste0(fn, "_", x, "_chunk.tsv"),
-                   col.names = col.names,
-                   sep = sep,
-                   quote = FALSE)
-  return(NULL)
-})
-
-return(NULL)
-
-}
