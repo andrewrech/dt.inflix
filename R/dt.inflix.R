@@ -10,6 +10,9 @@
 #' @import data.table
 #' @import parallel
 #' @import stringi
+#' @import glue
+#' @import future.apply
+#' @import crayon
 #' @import testthat
 #' @importFrom magrittr %>% %T>% %$% %<>%
 #' @importFrom Rdpack reprompt
@@ -152,8 +155,8 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 					dt %>% data.table::setnames(
 					   dt %>%
 					   names %>%
-					   stringr::str_replace_all("__", "_") %>%
-					   stringr::str_replace_all("(_|\\.)$", ""))
+					   stringi::stri_replace_all_regex("__", "_") %>%
+					   stringi::stri_replace_all_regex("(_|\\.)$", ""))
 					return(dt)
 
 
@@ -172,8 +175,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #' @export %likef%
 #' @md
 
-`%likef%` <- function(vector, pattern)
-{
+`%likef%` <- function(vector, pattern){
     if (is.factor(vector)){
        lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
     }
@@ -196,8 +198,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #' @export %include%
 #' @md
 
-`%include%` <- function(vector, pattern)
-{
+`%include%` <- function(vector, pattern){
     if (is.factor(vector)){
        lv <- as.integer(vector) %in% stringi::stri_detect_regex(levels(vector), pattern, opts_regex = stringi::stri_opts_regex(case_insensitive = FALSE, comments = TRUE,  error_on_unknown_escapes = TRUE))
     }
@@ -221,8 +222,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #' @export %includef%
 #' @md
 
-`%includef%` <- function(vector, pattern)
-{
+`%includef%` <- function(vector, pattern){
     if (is.factor(vector)){
         lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
     }
@@ -244,8 +244,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #'
 #' @export %exclude%
 
-`%exclude%` <- function(vector, pattern)
-{
+`%exclude%` <- function(vector, pattern){
     if (is.factor(vector)){
 
        lv <- as.integer(vector) %in% stringi::stri_detect_regex(levels(vector), pattern, opts_regex = stringi::stri_opts_regex(case_insensitive = FALSE, comments = TRUE,  error_on_unknown_escapes = TRUE))
@@ -269,8 +268,8 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #'
 #' @export %excludef%
 
-`%excludef%` <- function(vector, pattern)
-{
+`%excludef%` <- function(vector, pattern){
+
     if (is.factor(vector)){
         lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
     }
@@ -363,33 +362,95 @@ return(invisible(dt))
 ## ---- chunk
 #' Data.table::split but with aggregate "chunks".
 #'
-#' `chunk` performs `data.table::split` for a column but returns a list of length `cl`. The purpose of this function is to parallelize over `by` more efficiently when `by` >> `cl`.
+#' `chunk` performs `data.table::split` for a column and then uses `fun` on each chunk. The purpose of this function is to parallelize over `by` more efficiently when `by` >> `cl`.
 #'
 #' @param dt A data.table.
 #' @param by Column to chunk by.
+#' @param fun Monadic data table function to use on chunks. Function must return a data table of columns to add and `.id`, and index created by `chunk`.
+#'
+#'Example function:
+#'```r
+#'  .fn <- function(dt){
+#'    print("start")
+#'     dt[, uuid := full_name %>%
+#'        stringr::str_extract("[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}")]
+#'
+#'    return(dt[, .SD, .SDcols = c("uuid", ".chunk_id")])
+#'
+#'  }
+#'```r
+#'
 #' @param cl Number of chunks.
 #'
-#' @return `cl` data.table chunks with `col` split exclusively
+#' @return `cl` data.table chunks with `by` split exclusively. The data table returned has new columns called `.id`, the default by parameter of non was specified, and .vec_chunk, the assignment in `cl`.
 #'
 #' @export chunk
 
-chunk <- function(dt, by, cl = parallel::detectCores()){
+chunk <- function(dt, fun, by = ".id", cl = parallel::detectCores()){
 
-  dt %>% data.table::setkeyv(by)
+  if (!by %chin% (dt %>% names))
+    dt[, .chunk_by, .I]
 
-  levels <- dt[, get(by) %>% unique]
+  dt[, .chunk_by := get(by)]
+
+  dt[, .chunk_id := .I]
+
+  # key to speed unique and join
+  dt %>% data.table::setkey(.chunk_by)
+
+  levels <- dt[, .chunk_by %>% unique]
 
   suppressWarnings(dt[, .vec_chunk := NULL])
 
-  # divide data tables cleanly over by
 
-  .vec_chunk <- rep(1:cl, (length(levels) / cl) %>% ceiling) %>% .[1:length(levels)]
+  # divide levels of by into chunks of cl
 
-  dt <- data.table::data.table(.vec_chunk, levels) %>%
-        data.table::setnames("levels", by) %>%
-        merge(dt, all = TRUE, by = by)
+  x <- data.table::data.table(
+      .vec_chunk = rep(1:cl, (length(levels) /cl) %>% ceiling) %>%
+          .[1:length(levels)],
+      levels = levels,
+      key = "levels") %>%
+      data.table::setnames(c(".vec_chunk", ".chunk_by"))
 
-  return(split(dt, by = ".vec_chunk"))
+
+ # join on a subset of dt to then add .vec_chunk by reference
+ # to avoid large re-allocation for merged table
+  y <- x[dt[, .SD, .SDcols = ".chunk_by"]]
+
+  set(dt, j = ".vec_chunk", value = y[[".vec_chunk"]])
+
+
+  glue::glue("Running {deparse(substitute(fun))}") %>%
+  crayon::red %>%
+  cat("\n")
+
+  z <-  split(dt, by = ".vec_chunk") %>%
+          future.apply::future_lapply(function(x){
+
+              crayon::blue("...chunk") %>%
+              cat("\n")
+              x %<>% fun
+              crayon::yellow("   done") %>%
+              cat("\n")
+
+              return(x)
+
+              }) %>%
+          data.table::rbindlist(use.names = TRUE, fill = TRUE)
+
+  z %>% data.table::setkey(".chunk_id")
+  dt %>% setkey(".chunk_id")
+
+  for (i in z %>% names %exclude% "^\\.id$")
+
+    set(dt, j = i, value = z[[i]])
+
+  dt[, c(".chunk_id",
+         ".vec_chunk",
+         ".chunk_by") := NULL]
+
+
+  return(invisible(dt))
 
 }
 

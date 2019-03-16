@@ -2,20 +2,34 @@
 % Please edit documentation in R/dt.inflix.R
 \name{chunk}
 \alias{chunk}
-\title{Chunk a data table to disk for parallel operations}
+\title{Data.table::split but with aggregate "chunks".}
 \usage{
-chunk(dt, chunks = parallel::detectCores(), col.names = TRUE,
-  sep = "\\t")
+chunk(dt, fun, by = ".id", cl = parallel::detectCores())
 }
 \arguments{
 \item{dt}{A data.table.}
 
-\item{chunks}{Number of chunks.}
+\item{fun}{Monadic data table function to use on chunks. Function must return a data table of columns to add and `.id`, and index created by `chunk`.
 
-\item{col.names}{Logical. Write column names?}
+Example function:
+```r
+ .fn <- function(dt){
+   print("start")
+    dt[, uuid := full_name %>%
+       stringr::str_extract("[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}")]
 
-\item{sep}{Character. Column separator.}
+   return(dt[, .SD, .SDcols = c("uuid", ".chunk_id")])
+
+ }
+```r}
+
+\item{by}{Column to chunk by.}
+
+\item{cl}{Number of chunks.}
+}
+\value{
+`cl` data.table chunks with `by` split exclusively. The data table returned has new columns called `.id`, the default by parameter of non was specified, and .vec_chunk, the assignment in `cl`.
 }
 \description{
-Write a data.table to disk using \code{data.table::fwrite} in \code{chunks} segments. If is often faster to write out large tabular data to disk then read in parallel vs. \code{foreach} or \code{mclapply}
+`chunk` performs `data.table::split` for a column and then uses `fun` on each chunk. The purpose of this function is to parallelize over `by` more efficiently when `by` >> `cl`.
 }

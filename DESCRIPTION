@@ -3,21 +3,23 @@ Version: 0.0.1
 Title: Additional Inflix Operators for the R Package Data.table
 Description: Additional inflix operators and helper functions to use with the R package data.table during exploratory data analysis.
 Authors@R: c(
-          person("Andrew", "Rech", email = "rech@rech.io", role = c("aut", "cre")))
+          person("Andrew", "Rech", "J.", email = "rech@rech.io", role = c("aut", "cre")))
 License: LGPL-3
 Encoding: UTF-8
 LazyData: true
 RemoteUrl: https://github.com/andrewrech/dt.inflix
-Imports: Rdpack,
-                   data.table,
-                   magrittr,
-                   parallel,
-                   stats,
-                   stringi,
-                   stringr,
-                   testthat,
-                   utils
 Depends: R (>= 3.4.0)
 RdMacros: Rdpack
 LazyLoad: yes
+Imports: data.table,
+       parallel,
+       stringi,
+       glue,
+       future.apply,
+       crayon,
+       testthat,
+       magrittr,
+       Rdpack,
+       stats,
+       utils
 RoxygenNote: 6.1.1
