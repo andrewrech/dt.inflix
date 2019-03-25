@@ -4,3 +4,4 @@ raw_figures/
 *docx
 *sync-conflict*
  *.syncthing.*
+.osync_workdir
