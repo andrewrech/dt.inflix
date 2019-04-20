@@ -1,4 +1,4 @@
-## ---- allduplicated
+
 #' Return all duplicated rows of a data.table.
 #'
 #' @param dt Data table.
@@ -43,7 +43,7 @@ return(dt_dup)
 
 
 
-## ---- coerce_dt
+
 #' Recursively coerce a list to a flat data table, correctly naming columns.
 #'
 #' @param l List to coerce.
@@ -164,7 +164,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 
 
 
-## ---- `%likef%`
+
 #' Convenience inflix operator to return logical vector of elements matching a fixed pattern.
 #'
 #' @param vector Vector.
@@ -187,7 +187,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 
 
 
-## ---- `%include%`
+
 #' Convenience inflix operator to return vector elements matching a regular expression.
 #'
 #' @param vector Vector.
@@ -211,7 +211,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 
 
 
-## ---- `%includef%`
+
 #' Convenience inflix operator to return vector elements matching a fixed pattern.
 #'
 #' @param vector Vector.
@@ -234,7 +234,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 
 
 
-## ---- `%exclude%`
+
 #' Convenience inflix operator to return vector elements excluding those matching a regular expression.
 #'
 #' @param vector Vector.
@@ -258,7 +258,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 
 
 
-## ---- `%excludef%`
+
 #' Convenience inflix operator to return vector elements excluding a fixed pattern.
 #'
 #' @param vector Vector.
@@ -281,7 +281,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 
 
 
-## ---- `%withoutrows%`
+
 #' Convenience inflix operator to remove data.table rows.
 #'
 #' @param dt A data.table.
@@ -312,7 +312,7 @@ assign(deparse(substitute(dt)), dt.subset, envir =  parent.frame())
 
 
 
-## ---- `%with%`
+
 #' Convenience inflix operator to return a data.table of columns matching a regular expression.
 #'
 #' @param dt A data.table.
@@ -337,7 +337,7 @@ return(invisible(dt[, .SD, .SDcols = dt_cols]))
 
 
 
-## ---- `%without%`
+
 #' Convenience inflix operator to remove columns from a data.table by reference.
 #'
 #' @param dt A data.table.
@@ -359,7 +359,7 @@ return(invisible(dt))
 }
 
 
-## ---- chunk
+
 #' Data.table::split but with aggregate "chunks".
 #'
 #' `chunk` performs `data.table::split` for a column and then uses `fun` on each chunk. The purpose of this function is to parallelize over `by` more efficiently when `by` >> `cl`.
@@ -456,7 +456,7 @@ chunk <- function(dt, fun, by = ".id", cl = parallel::detectCores()){
 
 
 
-## ---- withoutna
+
 #' Convenience inflix operator to remove all(NA) or all(NULL) columns and rows from a data.table by reference.
 #'
 #' Remove columns from a data table if all values are NA or NULL; useful when subsetting.
