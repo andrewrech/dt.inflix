@@ -1,26 +1,11 @@
-testthat::test_that("name_of_test", {
+library(testthat)
+library(immune.health.flatiron)
+library(data.table)
+library(magrittr)
+library(dt.inflix)
 
-  # load test data
+testthat::test_that("placeholder", {
 
-  # create input data without calling external files
-  # and without requiring connectivity
-
-  dt <- data.table::data.table(expected_col = LETTERS)
-
-  # run test
-
-  # in this example
-  # just copy expected result as result
-  dto <- dt
-
-  # optionally print visual output for test lof
-  dto %>% print
-
-  # run set of tests to ensure output is correct
-
-  testthat::expect_equivalent(
-    dto$expected_col,
-    LETTERS
-    )
+   TRUE
 
     })
