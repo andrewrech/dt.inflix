@@ -362,11 +362,11 @@ return(invisible(dt))
 
 #' Data.table::split but with aggregate "chunks".
 #'
-#' `chunk` performs `data.table::split` for a column and then uses `fun` on each chunk. The purpose of this function is to parallelize over `by` more efficiently when `by` >> `cl`.
+#' `chunk` performs `data.table::split` for a column and then applies `fun` on resultant each chunk. The purpose of this function is to parallelize over `by` more efficiently when `by` >> `cl`. For instance, this can occur when performing non-trivial, non-vectorized calculations row-wise.
 #'
 #' @param dt A data.table.
 #' @param by Column to chunk by.
-#' @param fun Monadic data table function to use on chunks. Function must return a data table of columns to add and `.id`, and index created by `chunk`.
+#' @param fun Monadic data table function to use on chunks. Function must return a data table of columns to add and column `.chunk_id`, an index created by `chunk`. The returned table must be the same `nrow` as the input table.
 #'
 #'Example function:
 #'```r
@@ -386,11 +386,14 @@ return(invisible(dt))
 #'
 #' @export chunk
 
-chunk <- function(dt, fun, by = ".id", cl = parallel::detectCores()){
+chunk <- function(dt, fun, by, cl = parallel::detectCores()){
+
+  on.exit(list.files(pattern = "^\\.tmp\\.chunk.*csv$") %>% unlink)
 
   if (!by %chin% (dt %>% names))
-    dt[, .chunk_by, .I]
+    dt[, .chunk_by := .I]
 
+  if (by %chin% (dt %>% names))
   dt[, .chunk_by := get(by)]
 
   dt[, .chunk_id := .I]
@@ -402,8 +405,7 @@ chunk <- function(dt, fun, by = ".id", cl = parallel::detectCores()){
 
   suppressWarnings(dt[, .vec_chunk := NULL])
 
-
-  # divide levels of by into chunks of cl
+  # wholly divide levels of by into chunks of cl
 
   x <- data.table::data.table(
       .vec_chunk = rep(1:cl, (length(levels) /cl) %>% ceiling) %>%
@@ -415,46 +417,79 @@ chunk <- function(dt, fun, by = ".id", cl = parallel::detectCores()){
 
  # join on a subset of dt to then add .vec_chunk by reference
  # to avoid large re-allocation for merged table
+
   y <- x[dt[, .SD, .SDcols = ".chunk_by"]]
-
   set(dt, j = ".vec_chunk", value = y[[".vec_chunk"]])
-
 
   glue::glue("Running {deparse(substitute(fun))}") %>%
   crayon::red %>%
   cat("\n")
 
-  z <-  split(dt, by = ".vec_chunk") %>%
-          future.apply::future_lapply(function(x){
 
-              crayon::blue("...chunk") %>%
-              cat("\n")
-              x %<>% fun
-              crayon::yellow("   done") %>%
-              cat("\n")
+  # on each chunk on a single core
+  # save results to disk, then load back into R
+  # this avoids lapply allocation limit
 
-              return(x)
+   split(dt, by = ".vec_chunk") %>%
+    future.apply::future_lapply(function(x){
 
-              }) %>%
-          data.table::rbindlist(use.names = TRUE, fill = TRUE)
+        crayon::blue("...chunk") %>%
+        cat("\n")
+        x %<>% fun
+        crayon::yellow("   done") %>%
+        cat("\n")
 
-  z %>% data.table::setkey(".chunk_id")
+        x %>%
+        data.table::fwrite(
+          glue::glue(".tmp.chunk.{uuid::UUIDgenerate()}.csv"))
+
+        return(NULL)
+
+        })
+
+  # read in each table and bind sequentially
+
+  ret <- list.files(pattern = "^\\.tmp\\.chunk.*csv$",
+                    all.files = TRUE) %>%
+         fbind
+  ret %>% data.table::setkey(".chunk_id")
   dt %>% setkey(".chunk_id")
 
+  # add computed columns to the existing data table by reference
   for (i in z %>% names %exclude% "^\\.id$")
-
     set(dt, j = i, value = z[[i]])
 
-  dt[, c(".chunk_id",
-         ".vec_chunk",
-         ".chunk_by") := NULL]
+  # remove intermediate indices before returning
+  suppressWarnings(
+        dt[, c(".chunk_id",
+          ".vec_chunk",
+          ".chunk_by") := NULL])
 
 
   return(invisible(dt))
 
 }
 
+#' Sequentially load and row bind data tables.
+#'
+#' `fbind` sequentially loads data tables from disk and binds the data tables together by row names. The purpose of this method is to
+#'
+#' @param files Character vector. Files to load and row bind.
+#'
+#' @return A data table.
+#'
 
+fbind <- function(files){
+
+  ret <- data.table::data.table()
+  for (i in files)
+    ret <- data.table::fread(i) %>%
+        { data.table::rbindlist(
+        list(., ret), use.names = TRUE, fill = TRUE)}
+
+  return(ret)
+
+}
 
 
 #' Convenience inflix operator to remove all(NA) or all(NULL) columns and rows from a data.table by reference.
