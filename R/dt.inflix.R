@@ -388,7 +388,9 @@ return(invisible(dt))
 
 chunk <- function(dt, fun, by, cl = parallel::detectCores()){
 
-  on.exit(list.files(pattern = "^\\.tmp\\.chunk.*csv$") %>% unlink)
+  on.exit(list.files(pattern = "^\\.tmp\\.chunk.*RDS$") %>% unlink)
+
+  id <- uuid::UUIDgenerate() %>% substr(1, 8)
 
   if (!by %chin% (dt %>% names))
     dt[, .chunk_by := .I]
@@ -439,9 +441,15 @@ chunk <- function(dt, fun, by, cl = parallel::detectCores()){
         crayon::yellow("   done") %>%
         cat("\n")
 
+        # create unique filename
+        filenameId <- uuid::UUIDgenerate() %>% substr(1, 8) %>%
+        paste0("-", id)
+
+
         x %>%
-        data.table::fwrite(
-          glue::glue(".tmp.chunk.{uuid::UUIDgenerate()}.csv"))
+        saveRDS(
+          glue::glue(".tmp.chunk.{filenameId}.RDS"),
+          compress = FALSE)
 
         return(NULL)
 
@@ -449,15 +457,15 @@ chunk <- function(dt, fun, by, cl = parallel::detectCores()){
 
   # read in each table and bind sequentially
 
-  ret <- list.files(pattern = "^\\.tmp\\.chunk.*csv$",
+  ret <- list.files(pattern = glue::glue("^\\.tmp\\.chunk.*{id})",
                     all.files = TRUE) %>%
-         fbind
+                    fbind
   ret %>% data.table::setkey(".chunk_id")
-  dt %>% setkey(".chunk_id")
+  ret %>% setkey(".chunk_id")
 
   # add computed columns to the existing data table by reference
-  for (i in z %>% names %exclude% "^\\.id$")
-    set(dt, j = i, value = z[[i]])
+  for (i in ret %>% names %exclude% "^\\.id$")
+    set(dt, j = i, value = ret[[i]])
 
   # remove intermediate indices before returning
   suppressWarnings(
@@ -472,7 +480,7 @@ chunk <- function(dt, fun, by, cl = parallel::detectCores()){
 
 #' Sequentially load and row bind data tables.
 #'
-#' `fbind` sequentially loads data tables from disk and binds the data tables together by row names. The purpose of this method is to
+#' `fbind` sequentially loads data tables from disk and binds the data tables together by row names. The purpose of this method is to support parallelized data table operations, bypassing the 1.5 Gb return vector limit of the `lapply` family of functions. Both `.RDS` and plaint text tables are supported.
 #'
 #' @param files Character vector. Files to load and row bind.
 #'
@@ -482,10 +490,20 @@ chunk <- function(dt, fun, by, cl = parallel::detectCores()){
 fbind <- function(files){
 
   ret <- data.table::data.table()
-  for (i in files)
-    ret <- data.table::fread(i) %>%
-        { data.table::rbindlist(
-        list(., ret), use.names = TRUE, fill = TRUE)}
+  for (i in files){
+
+    if (i %like% "\\.tsv$|\\.csv|\\.txt")
+      ret <- data.table::fread(i) %>%
+          { data.table::rbindlist(
+          list(., ret), use.names = TRUE, fill = TRUE)}
+
+    if (i %like% "\\.rds$|\\.Rds|\\.RDS")
+      ret <- readRDS(i) %>%
+          { data.table::rbindlist(
+          list(., ret), use.names = TRUE, fill = TRUE)}
+
+  }
+
 
   return(ret)
 
