@@ -457,10 +457,12 @@ chunk <- function(dt, fun, by, cl = parallel::detectCores()){
 
   # read in each table and bind sequentially
 
-  ret <- list.files(pattern = glue::glue("^\\.tmp\\.chunk.*{id})",
+  ret <- list.files(pattern = glue::glue("^\\.tmp\\.chunk.*{id}"),
                     all.files = TRUE) %>%
                     fbind
+
   ret %>% data.table::setkey(".chunk_id")
+
   ret %>% setkey(".chunk_id")
 
   # add computed columns to the existing data table by reference
