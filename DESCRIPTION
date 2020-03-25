@@ -1,26 +1,48 @@
-Package: dt.inflix
+Package: immune.health.flatiron
+Title: Flatiron database analysis for the Immune Health project
 Version: 0.0.1
-Title: Additional Inflix Operators for the R Package Data.table
-Description: Additional inflix operators and helper functions to use with the R package data.table during exploratory data analysis.
-Authors@R: c(
-          person("Andrew", "Rech", "J.", email = "rech@rech.io", role = c("aut", "cre")))
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a license
+Authors@R: 
+    c(person(given = c("Derek", "A."),
+             family = "Oldrigde",
+             role = c("aut", "cre"),
+             email = "Derek.Oldridge@uphs.upenn.edu"),
+      person(given = c("Andrew", "J."),
+             family = "Rech",
+             role = "aut",
+             email = "rech@rech.io"))
+Description: R package to assess Flatiron Health data using best
+    practices. Focused prognostic markers of response to immune checkpoint
+    blockade, evaluated using standard approaches and supervised deep
+    learning.
+License: GPL-3 + file LICENSE
+Depends: 
+    R (>= 3.5.0)
+Imports: 
+    bit64,
+    cowplot,
+    crayon,
+    data.table,
+    formattable,
+    future,
+    future.apply,
+    glue,
+    htmlwidgets,
+    lubridate,
+    magrittr,
+    parallel,
+    purrr,
+    Rdpack,
+    stats,
+    stats,
+    stringr,
+    testthat,
+    tidyr
+RdMacros: 
+    Rdpack
 Encoding: UTF-8
 LazyData: true
-Roxygen: list(markdown = TRUE)
-RemoteUrl: https://github.com/andrewrech/dt.inflix
-Depends: R (>= 3.5.0)
-RdMacros: Rdpack
 LazyLoad: yes
-Imports: data.table,
-       parallel,
-       stringi,
-       glue,
-       future.apply,
-       crayon,
-       testthat,
-       magrittr,
-       Rdpack,
-       stats,
-       utils
-RoxygenNote: 7.0.1.9000
+RemoteUrl: 
+    https://github.com/immune-health/immune-health-flatiron
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0.9000
