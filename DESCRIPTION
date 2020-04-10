@@ -1,48 +1,33 @@
-Package: immune.health.flatiron
-Title: Flatiron database analysis for the Immune Health project
+Package: dt.inflix
+Title: Additional Inflix Operators for the R Package Data.table
 Version: 0.0.1
 Authors@R: 
-    c(person(given = c("Derek", "A."),
-             family = "Oldrigde",
-             role = c("aut", "cre"),
-             email = "Derek.Oldridge@uphs.upenn.edu"),
-      person(given = c("Andrew", "J."),
-             family = "Rech",
-             role = "aut",
-             email = "rech@rech.io"))
-Description: R package to assess Flatiron Health data using best
-    practices. Focused prognostic markers of response to immune checkpoint
-    blockade, evaluated using standard approaches and supervised deep
-    learning.
+    person(given = c("Andrew", "J."),
+           family = "Rech",
+           role = c("aut", "cre"),
+           email = "rech@rech.io")
+Description: Additional inflix operators and helper functions to
+    use with the R package data.table during exploratory data analysis.
 License: GPL-3 + file LICENSE
 Depends: 
     R (>= 3.5.0)
 Imports: 
-    bit64,
-    cowplot,
     crayon,
     data.table,
-    formattable,
-    future,
     future.apply,
     glue,
-    htmlwidgets,
-    lubridate,
     magrittr,
     parallel,
-    purrr,
     Rdpack,
     stats,
-    stats,
-    stringr,
+    stringi,
     testthat,
-    tidyr
+    utils
 RdMacros: 
     Rdpack
 Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
-RemoteUrl: 
-    https://github.com/immune-health/immune-health-flatiron
+RemoteUrl: https://github.com/andrewrech/dt.inflix
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0.9000
