@@ -326,7 +326,7 @@ assign(deparse(substitute(dt)), dt.subset, envir =  parent.frame())
 
 dt_cols <- lapply(cols, function(x){
 dt %>% names %include% x
-}) %>% unlist %>% unique %>% stats::na.omit %>% as.vector
+}) %>% unlist %>% unique %>% stats::na.omit(.) %>% as.vector
 
 if (dt_cols %>% length == 0){
   stop("No columns selected.")
@@ -351,7 +351,7 @@ return(invisible(dt[, .SD, .SDcols = dt_cols]))
 
 dt_cols <- lapply(cols, function(x){
 dt %>% names %include% x
-}) %>% unlist %>% unique %>% stats::na.omit %>% as.vector
+}) %>% unlist %>% unique %>% stats::na.omit(.) %>% as.vector
 
 if (dt_cols %>% length > 0) dt[, `:=`(dt_cols %>% eval, NULL)]
 
@@ -360,7 +360,7 @@ return(invisible(dt))
 
 
 
-#' Data.table::split but with aggregate "chunks".
+#' Data.table::split(.) but with aggregate "chunks".
 #'
 #' `chunk` performs `data.table::split` for a column and then applies `fun` on resultant each chunk. The purpose of this function is to parallelize over `by` more efficiently when `by` >> `cl`. For instance, this can occur when performing non-trivial, non-vectorized calculations row-wise.
 #'
@@ -424,7 +424,7 @@ chunk <- function(dt, fun, by, cl = parallel::detectCores()){
   set(dt, j = ".vec_chunk", value = y[[".vec_chunk"]])
 
   glue::glue("Running {deparse(substitute(fun))}") %>%
-  crayon::red %>%
+  crayon::red(.) %>%
   cat("\n")
 
 
