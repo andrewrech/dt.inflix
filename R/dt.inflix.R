@@ -11,7 +11,6 @@
 #' @import parallel
 #' @import stringi
 #' @import glue
-#' @import future.apply
 #' @import crayon
 #' @import testthat
 #' @importFrom magrittr %>% %T>% %$% %<>%
@@ -360,125 +359,6 @@ return(invisible(dt))
 
 
 
-#' Data.table::split(.) but with aggregate "chunks".
-#'
-#' `chunk` performs `data.table::split` for a column and then applies `fun` on resultant each chunk. The purpose of this function is to parallelize over `by` more efficiently when `by` >> `cl`. For instance, this can occur when performing non-trivial, non-vectorized calculations row-wise.
-#'
-#' @param dt A data.table.
-#' @param by Column to chunk by.
-#' @param fun Monadic data table function to use on chunks. Function must return a data table of columns to add and column `.chunk_id`, an index created by `chunk`. The returned table must be the same `nrow` as the input table.
-#'
-#'Example function:
-#'```r
-#'  .fn <- function(dt){
-#'    print("start")
-#'     dt[, uuid := full_name %>%
-#'        stringr::str_extract("[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}")]
-#'
-#'    return(dt[, .SD, .SDcols = c("uuid", ".chunk_id")])
-#'
-#'  }
-#'```r
-#'
-#' @param cl Number of chunks.
-#'
-#' @return `cl` data.table chunks with `by` split exclusively. The data table returned has new columns called `.id`, the default by parameter of non was specified, and .vec_chunk, the assignment in `cl`.
-#'
-#' @export chunk
-
-chunk <- function(dt, fun, by, cl = parallel::detectCores()){
-
-  on.exit(list.files(pattern = "^\\.tmp\\.chunk.*RDS$") %>% unlink)
-
-  id <- uuid::UUIDgenerate() %>% substr(1, 8)
-
-  if (!by %chin% (dt %>% names))
-    dt[, .chunk_by := .I]
-
-  if (by %chin% (dt %>% names))
-  dt[, .chunk_by := get(by)]
-
-  dt[, .chunk_id := .I]
-
-  # key to speed unique and join
-  dt %>% data.table::setkey(.chunk_by)
-
-  levels <- dt[, .chunk_by %>% unique]
-
-  suppressWarnings(dt[, .vec_chunk := NULL])
-
-  # wholly divide levels of by into chunks of cl
-
-  x <- data.table::data.table(
-      .vec_chunk = rep(1:cl, (length(levels) /cl) %>% ceiling) %>%
-          .[1:length(levels)],
-      levels = levels,
-      key = "levels") %>%
-      data.table::setnames(c(".vec_chunk", ".chunk_by"))
-
-
- # join on a subset of dt to then add .vec_chunk by reference
- # to avoid large re-allocation for merged table
-
-  y <- x[dt[, .SD, .SDcols = ".chunk_by"]]
-  set(dt, j = ".vec_chunk", value = y[[".vec_chunk"]])
-
-  glue::glue("Running {deparse(substitute(fun))}") %>%
-  crayon::red(.) %>%
-  cat("\n")
-
-
-  # on each chunk on a single core
-  # save results to disk, then load back into R
-  # this avoids lapply allocation limit
-
-   split(dt, by = ".vec_chunk") %>%
-    future.apply::future_lapply(function(x){
-
-        crayon::blue("...chunk") %>%
-        cat("\n")
-        x %<>% fun
-        crayon::yellow("   done") %>%
-        cat("\n")
-
-        # create unique filename
-        filenameId <- uuid::UUIDgenerate() %>% substr(1, 8) %>%
-        paste0("-", id)
-
-
-        x %>%
-        saveRDS(
-          glue::glue(".tmp.chunk.{filenameId}.RDS"),
-          compress = FALSE)
-
-        return(NULL)
-
-        })
-
-  # read in each table and bind sequentially
-
-  ret <- list.files(pattern = glue::glue("^\\.tmp\\.chunk.*{id}"),
-                    all.files = TRUE) %>%
-                    fbind
-
-  ret %>% data.table::setkey(".chunk_id")
-
-  ret %>% setkey(".chunk_id")
-
-  # add computed columns to the existing data table by reference
-  for (i in ret %>% names %exclude% "^\\.id$")
-    set(dt, j = i, value = ret[[i]])
-
-  # remove intermediate indices before returning
-  suppressWarnings(
-        dt[, c(".chunk_id",
-          ".vec_chunk",
-          ".chunk_by") := NULL])
-
-
-  return(invisible(dt))
-
-}
 
 #' Sequentially load and row bind data tables.
 #'
@@ -539,4 +419,3 @@ dt %<>% .[rowSums(is.na(dt)) != n_col, ]
 
 return(invisible(dt))
 }
-
