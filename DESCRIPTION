@@ -1,7 +1,7 @@
 Package: dt.inflix
 Title: Additional Inflix Operators for the R Package Data.table
 Version: 0.0.1
-Authors@R: 
+Authors@R:
     person(given = c("Andrew", "J."),
            family = "Rech",
            role = c("aut", "cre"),
@@ -9,25 +9,18 @@ Authors@R:
 Description: Additional inflix operators and helper functions to
     use with the R package data.table during exploratory data analysis.
 License: GPL-3 + file LICENSE
-Depends: 
+Depends:
     R (>= 3.5.0)
-Imports: 
-    crayon,
+Imports:
     data.table,
-    future.apply,
-    glue,
     magrittr,
-    parallel,
-    Rdpack,
     stats,
     stringi,
     testthat,
     utils
-RdMacros: 
-    Rdpack
 Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
 RemoteUrl: https://github.com/andrewrech/dt.inflix
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0.9000
+RoxygenNote: 7.1.1

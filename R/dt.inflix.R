@@ -8,36 +8,30 @@
 #'
 #' @export allduplicated
 #' @import data.table
-#' @import parallel
 #' @import stringi
-#' @import glue
-#' @import crayon
 #' @import testthat
 #' @importFrom magrittr %>% %T>% %$% %<>%
-#' @importFrom Rdpack reprompt
 #' @importFrom stats na.omit
 #' @importFrom utils tail
 
-allduplicated <- function(dt, by = NULL){
+allduplicated <- function(dt, by = NULL) {
+  fD <- NULL
 
-fD <- NULL
-
-if (by %>% is.null){
-  data.table::setkey(dt)
-  dups <- duplicated(dt)
-}
-if (!by %>% is.null){
-  data.table::setkeyv(dt, cols = by)
-  dups <- duplicated(dt, by = by)
+  if (by %>% is.null()) {
+    data.table::setkey(dt)
+    dups <- duplicated(dt)
+  }
+  if (!by %>% is.null()) {
+    data.table::setkeyv(dt, cols = by)
+    dups <- duplicated(dt, by = by)
   }
 
-dt[, fD := dups | c(utils::tail(dups, -1), FALSE)]
-dt_dup <- dt[fD == TRUE]
-dt_dup[, fD := NULL]
-dt[, fD := NULL]
+  dt[, fD := dups | c(utils::tail(dups, -1), FALSE)]
+  dt_dup <- dt[fD == TRUE]
+  dt_dup[, fD := NULL]
+  dt[, fD := NULL]
 
-return(dt_dup)
-
+  return(dt_dup)
 }
 
 
@@ -53,112 +47,114 @@ return(dt_dup)
 #' @export coerce_dt
 #'
 
-coerce_dt <- function(l, ix = NULL, names = TRUE){
+coerce_dt <- function(l, ix = NULL, names = TRUE) {
+  lname <- ""
 
-	lname <- ""
+  # generate correct flat data table names if possible
 
-	# generate correct flat data table names if possible
+  if (!ix %>% is.null()) {
+    for (i in ix) {
+      iname <- try(l[i] %>% names() %>% .[1])
+      if (!iname %>% is.null() &
+        iname %>% class() == "character") {
+        if (lname != "") {
+          lname <- paste0(lname, "_", iname)
+        }
 
-		if (!ix %>% is.null)
-			for (i in ix){
+        if (lname == "") {
+          lname <- iname
+        }
+      }
 
-				iname <- try(l[i] %>% names %>% .[1])
-				if (!iname %>% is.null &
-		  		  iname %>% class == "character"){
+      l <- l[[i]]
+    }
+  }
 
-		  			if (lname != "")
-		  				lname <- paste0(lname, "_", iname)
-
-		  			if (lname == "")
-	  				lname <- iname
-		  		}
-
-					l <- l[[i]]
-
-					}
-
-				if (l %>% class %>% .[1] != "list")
-					l <- list(l)
-
-
-	if (!"list" %chin% (l %>% class))
-		stop("l is not a list.")
-
-	dt <- parallel::mclapply(1:length(l), function(i){
-
-		print(i)
-
-		# if a list, recurse
-
-	  if (
-	      (
-	       (l[[i]] %>%
-	       	       class %>%
-	       	       .[1]) == "list") %>%
-	    	any
-	    	){
-
-	  	# set name
-	  		iname <- try(l[i] %>% names %>% .[1])
-
-	  		if (!iname %>% is.null &
-	  		    iname %>% class == "character"){
-
-	  			if (lname != "")
-	  				lname <- paste0(lname, "_", iname)
-
-	  			if (lname == "")
-	  				lname <- iname
-
-	  		}
-
-					return(l[[i]] %>% coerce_dt)
-		  		}
-
-		  #
-	    dt <- try(l[[i]] %>% data.table::as.data.table(keep.rownames = TRUE))
-
-	  	# set name
-		    iname <- try(l[i] %>% names %>% .[1])
-
-				if (dt %>% class %>% .[1] != "data.table" ||
-				    dt %>% nrow == 0 ||
-				    dt %>% length == 0)
-						return(NULL)
-
-		  		if (!iname %>% is.null &
-		  		    iname %>% class == "character"){
-
-		  			if (lname != "")
-		  				lname <- paste0(lname, "_", iname)
-
-		  			if (lname == "")
-		  				lname <- iname
-
-					}
-				if (!names)
-					dt %>%
-						data.table::setnames(
-               paste0(lname, "_", dt %>% names))
-
-					return(dt)
-
-  	}) %>%
-			  rbindlist(use.names = TRUE, fill = TRUE)
-
-			if (dt %>% class %>% .[1] != "data.table" ||
-			    dt %>% nrow == 0 ||
-			    dt %>% length == 0)
-					return(NULL)
-
-					dt %>% data.table::setnames(
-					   dt %>%
-					   names %>%
-					   stringi::stri_replace_all_regex("__", "_") %>%
-					   stringi::stri_replace_all_regex("(_|\\.)$", ""))
-					return(dt)
+  if (l %>% class() %>% .[1] != "list") {
+    l <- list(l)
+  }
 
 
+  if (!"list" %chin% (l %>% class())) {
+    stop("l is not a list.")
+  }
+
+  dt <- parallel::mclapply(1:length(l), function(i) {
+    print(i)
+
+    # if a list, recurse
+
+    if (
+      (
+        (l[[i]] %>%
+          class() %>%
+          .[1]) == "list") %>%
+        any()
+    ) {
+
+      # set name
+      iname <- try(l[i] %>% names() %>% .[1])
+
+      if (!iname %>% is.null() &
+        iname %>% class() == "character") {
+        if (lname != "") {
+          lname <- paste0(lname, "_", iname)
+        }
+
+        if (lname == "") {
+          lname <- iname
+        }
+      }
+
+      return(l[[i]] %>% coerce_dt())
+    }
+
+    #
+    dt <- try(l[[i]] %>% data.table::as.data.table(keep.rownames = TRUE))
+
+    # set name
+    iname <- try(l[i] %>% names() %>% .[1])
+
+    if (dt %>% class() %>% .[1] != "data.table" ||
+      dt %>% nrow() == 0 ||
+      dt %>% length() == 0) {
+      return(NULL)
+    }
+
+    if (!iname %>% is.null() &
+      iname %>% class() == "character") {
+      if (lname != "") {
+        lname <- paste0(lname, "_", iname)
+      }
+
+      if (lname == "") {
+        lname <- iname
+      }
+    }
+    if (!names) {
+      dt %>%
+        data.table::setnames(
+          paste0(lname, "_", dt %>% names())
+        )
+    }
+
+    return(dt)
+  }) %>%
+    rbindlist(use.names = TRUE, fill = TRUE)
+
+  if (dt %>% class() %>% .[1] != "data.table" ||
+    dt %>% nrow() == 0 ||
+    dt %>% length() == 0) {
+    return(NULL)
+  }
+
+  dt %>% data.table::setnames(
+    dt %>%
+      names() %>%
+      stringi::stri_replace_all_regex("__", "_") %>%
+      stringi::stri_replace_all_regex("(_|\\.)$", "")
+  )
+  return(dt)
 }
 
 
@@ -174,14 +170,14 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #' @export %likef%
 #' @md
 
-`%likef%` <- function(vector, pattern){
-    if (is.factor(vector)){
-       lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
-    }
-    else {
-       lv <- stringi::stri_detect_fixed(vector, pattern, opts_fixed = stringi::stri_opts_fixed())
-    }
-    return(lv)
+`%likef%` <- function(vector, pattern) {
+  if (is.factor(vector)) {
+    lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
+  }
+  else {
+    lv <- stringi::stri_detect_fixed(vector, pattern, opts_fixed = stringi::stri_opts_fixed())
+  }
+  return(lv)
 }
 
 
@@ -197,15 +193,16 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #' @export %include%
 #' @md
 
-`%include%` <- function(vector, pattern){
-    if (is.factor(vector)){
-       lv <- as.integer(vector) %in% stringi::stri_detect_regex(levels(vector), pattern, opts_regex = stringi::stri_opts_regex(case_insensitive = FALSE, comments = TRUE,  error_on_unknown_escapes = TRUE))
-    }
-    else {
-       lv <- stringi::stri_detect_regex(vector, pattern, opts_regex = stringi::stri_opts_regex(
-       case_insensitive = FALSE, comments = TRUE, error_on_unknown_escapes = TRUE))
-    }
-    return(vector[lv])
+`%include%` <- function(vector, pattern) {
+  if (is.factor(vector)) {
+    lv <- as.integer(vector) %in% stringi::stri_detect_regex(levels(vector), pattern, opts_regex = stringi::stri_opts_regex(case_insensitive = FALSE, comments = TRUE, error_on_unknown_escapes = TRUE))
+  }
+  else {
+    lv <- stringi::stri_detect_regex(vector, pattern, opts_regex = stringi::stri_opts_regex(
+      case_insensitive = FALSE, comments = TRUE, error_on_unknown_escapes = TRUE
+    ))
+  }
+  return(vector[lv])
 }
 
 
@@ -221,14 +218,14 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #' @export %includef%
 #' @md
 
-`%includef%` <- function(vector, pattern){
-    if (is.factor(vector)){
-        lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
-    }
-    else {
-        lv <- stringi::stri_detect_fixed(vector, pattern, opts_fixed = stringi::stri_opts_fixed())
-    }
-    return(vector[lv])
+`%includef%` <- function(vector, pattern) {
+  if (is.factor(vector)) {
+    lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
+  }
+  else {
+    lv <- stringi::stri_detect_fixed(vector, pattern, opts_fixed = stringi::stri_opts_fixed())
+  }
+  return(vector[lv])
 }
 
 
@@ -243,16 +240,16 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #'
 #' @export %exclude%
 
-`%exclude%` <- function(vector, pattern){
-    if (is.factor(vector)){
-
-       lv <- as.integer(vector) %in% stringi::stri_detect_regex(levels(vector), pattern, opts_regex = stringi::stri_opts_regex(case_insensitive = FALSE, comments = TRUE,  error_on_unknown_escapes = TRUE))
-    }
-    else {
-       lv <- stringi::stri_detect_regex(vector, pattern, opts_regex = stringi::stri_opts_regex(
-       case_insensitive = FALSE, comments = TRUE, error_on_unknown_escapes = TRUE))
-    }
-    return(vector[!lv])
+`%exclude%` <- function(vector, pattern) {
+  if (is.factor(vector)) {
+    lv <- as.integer(vector) %in% stringi::stri_detect_regex(levels(vector), pattern, opts_regex = stringi::stri_opts_regex(case_insensitive = FALSE, comments = TRUE, error_on_unknown_escapes = TRUE))
+  }
+  else {
+    lv <- stringi::stri_detect_regex(vector, pattern, opts_regex = stringi::stri_opts_regex(
+      case_insensitive = FALSE, comments = TRUE, error_on_unknown_escapes = TRUE
+    ))
+  }
+  return(vector[!lv])
 }
 
 
@@ -267,15 +264,14 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #'
 #' @export %excludef%
 
-`%excludef%` <- function(vector, pattern){
-
-    if (is.factor(vector)){
-        lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
-    }
-    else {
-        lv <- stringi::stri_detect_fixed(vector, pattern, opts_fixed = stringi::stri_opts_fixed())
-    }
-    return(vector[!lv])
+`%excludef%` <- function(vector, pattern) {
+  if (is.factor(vector)) {
+    lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
+  }
+  else {
+    lv <- stringi::stri_detect_fixed(vector, pattern, opts_fixed = stringi::stri_opts_fixed())
+  }
+  return(vector[!lv])
 }
 
 
@@ -290,23 +286,26 @@ coerce_dt <- function(l, ix = NULL, names = TRUE){
 #'
 #' @export %withoutrows%
 
-`%withoutrows%` <- function(dt, rows){
-
-  if (rows %>% is.na %>% any | rows %>% is.null %>% any | !rows %>% as.integer) stop("Error in row indicies.")
+`%withoutrows%` <- function(dt, rows) {
+  if (rows %>% is.na() %>% any() | rows %>%
+    is.null() %>%
+    any() | !rows %>% as.integer()) {
+    stop("Error in row indicies.")
+  }
 
   keep <- setdiff(dt[, .I], rows)
-  cols = names(dt)
+  cols <- names(dt)
   dt.subset <- data.table::data.table(dt[[1]][keep])
   data.table::setnames(dt.subset, cols[1])
-  for (col in cols[2:length(cols)]){
+  for (col in cols[2:length(cols)]) {
     dt.subset[, (col) := dt[[col]][keep]]
-    dt[, (col) := NULL]  # delete
+    dt[, (col) := NULL] # delete
   }
   # remove remaining dt col
-  dt[, (dt %>% names) := NULL]
+  dt[, (dt %>% names()) := NULL]
 
-# assign new subset dt back to parent env
-assign(deparse(substitute(dt)), dt.subset, envir =  parent.frame())
+  # assign new subset dt back to parent env
+  assign(deparse(substitute(dt)), dt.subset, envir = parent.frame())
 }
 
 
@@ -321,17 +320,19 @@ assign(deparse(substitute(dt)), dt.subset, envir =  parent.frame())
 #'
 #' @export %with%
 
-`%with%` <- function(dt, cols){
+`%with%` <- function(dt, cols) {
+  dt_cols <- lapply(cols, function(x) {
+    dt %>% names() %include% x
+  }) %>%
+    unlist() %>%
+    unique() %>%
+    stats::na.omit(.) %>%
+    as.vector()
 
-dt_cols <- lapply(cols, function(x){
-dt %>% names %include% x
-}) %>% unlist %>% unique %>% stats::na.omit(.) %>% as.vector
-
-if (dt_cols %>% length == 0){
-  stop("No columns selected.")
-}
-return(invisible(dt[, .SD, .SDcols = dt_cols]))
-
+  if (dt_cols %>% length() == 0) {
+    stop("No columns selected.")
+  }
+  return(invisible(dt[, .SD, .SDcols = dt_cols]))
 }
 
 
@@ -346,15 +347,18 @@ return(invisible(dt[, .SD, .SDcols = dt_cols]))
 #'
 #' @export %without%
 
-`%without%` <- function(dt, cols = NULL){
+`%without%` <- function(dt, cols = NULL) {
+  dt_cols <- lapply(cols, function(x) {
+    dt %>% names() %include% x
+  }) %>%
+    unlist() %>%
+    unique() %>%
+    stats::na.omit(.) %>%
+    as.vector()
 
-dt_cols <- lapply(cols, function(x){
-dt %>% names %include% x
-}) %>% unlist %>% unique %>% stats::na.omit(.) %>% as.vector
+  if (dt_cols %>% length() > 0) dt[, `:=`(dt_cols %>% eval(), NULL)]
 
-if (dt_cols %>% length > 0) dt[, `:=`(dt_cols %>% eval, NULL)]
-
-return(invisible(dt))
+  return(invisible(dt))
 }
 
 
@@ -369,26 +373,30 @@ return(invisible(dt))
 #' @return A data table.
 #'
 
-fbind <- function(files){
-
+fbind <- function(files) {
   ret <- data.table::data.table()
-  for (i in files){
+  for (i in files) {
+    if (i %like% "\\.tsv$|\\.csv|\\.txt") {
+      ret <- data.table::fread(i) %>% {
+        data.table::rbindlist(
+          list(., ret),
+          use.names = TRUE, fill = TRUE
+        )
+      }
+    }
 
-    if (i %like% "\\.tsv$|\\.csv|\\.txt")
-      ret <- data.table::fread(i) %>%
-          { data.table::rbindlist(
-          list(., ret), use.names = TRUE, fill = TRUE)}
-
-    if (i %like% "\\.rds$|\\.Rds|\\.RDS")
-      ret <- readRDS(i) %>%
-          { data.table::rbindlist(
-          list(., ret), use.names = TRUE, fill = TRUE)}
-
+    if (i %like% "\\.rds$|\\.Rds|\\.RDS") {
+      ret <- readRDS(i) %>% {
+        data.table::rbindlist(
+          list(., ret),
+          use.names = TRUE, fill = TRUE
+        )
+      }
+    }
   }
 
 
   return(ret)
-
 }
 
 
@@ -402,20 +410,21 @@ fbind <- function(files){
 #'
 #' @export withoutna
 
-withoutna <- function(dt){
+withoutna <- function(dt) {
+  `.` <- NULL
 
-`.` <- NULL
+  na_col <- lapply(1:length(dt), function(x) {
+    if (all(is.na(dt[[x]])) || all(is.null(dt[[x]]))) {
+      return(dt %>% names() %>% .[x])
+    }
+  }) %>% unlist()
 
-na_col <- lapply(1:length(dt), function(x){
-    if (all(is.na(dt[[x]])) || all(is.null(dt[[x]]))) return(dt %>% names %>% .[x])
-    }) %>% unlist
+  if (na_col %>% length() > 0) dt[, `:=`(na_col %>% eval(), NULL)]
 
-if (na_col %>% length > 0) dt[, `:=`(na_col %>% eval, NULL)]
+  dt[, .SD %>% is.na() %>% all(), by = 1:nrow(dt)]
 
-dt[, .SD %>% is.na %>% all, by = 1:nrow(dt)]
+  n_col <- ncol(dt)
+  dt %<>% .[rowSums(is.na(dt)) != n_col, ]
 
-n_col <- ncol(dt)
-dt %<>% .[rowSums(is.na(dt)) != n_col, ]
-
-return(invisible(dt))
+  return(invisible(dt))
 }
