@@ -140,7 +140,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE) {
 
     return(dt)
   }) %>%
-    rbindlist(use.names = TRUE, fill = TRUE)
+    data.table::rbindlist(use.names = TRUE, fill = TRUE)
 
   if (dt %>% class() %>% .[1] != "data.table" ||
     dt %>% nrow() == 0 ||
@@ -173,8 +173,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE) {
 `%likef%` <- function(vector, pattern) {
   if (is.factor(vector)) {
     lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
-  }
-  else {
+  } else {
     lv <- stringi::stri_detect_fixed(vector, pattern, opts_fixed = stringi::stri_opts_fixed())
   }
   return(lv)
@@ -196,8 +195,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE) {
 `%include%` <- function(vector, pattern) {
   if (is.factor(vector)) {
     lv <- as.integer(vector) %in% stringi::stri_detect_regex(levels(vector), pattern, opts_regex = stringi::stri_opts_regex(case_insensitive = FALSE, comments = TRUE, error_on_unknown_escapes = TRUE))
-  }
-  else {
+  } else {
     lv <- stringi::stri_detect_regex(vector, pattern, opts_regex = stringi::stri_opts_regex(
       case_insensitive = FALSE, comments = TRUE, error_on_unknown_escapes = TRUE
     ))
@@ -221,8 +219,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE) {
 `%includef%` <- function(vector, pattern) {
   if (is.factor(vector)) {
     lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
-  }
-  else {
+  } else {
     lv <- stringi::stri_detect_fixed(vector, pattern, opts_fixed = stringi::stri_opts_fixed())
   }
   return(vector[lv])
@@ -243,8 +240,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE) {
 `%exclude%` <- function(vector, pattern) {
   if (is.factor(vector)) {
     lv <- as.integer(vector) %in% stringi::stri_detect_regex(levels(vector), pattern, opts_regex = stringi::stri_opts_regex(case_insensitive = FALSE, comments = TRUE, error_on_unknown_escapes = TRUE))
-  }
-  else {
+  } else {
     lv <- stringi::stri_detect_regex(vector, pattern, opts_regex = stringi::stri_opts_regex(
       case_insensitive = FALSE, comments = TRUE, error_on_unknown_escapes = TRUE
     ))
@@ -267,8 +263,7 @@ coerce_dt <- function(l, ix = NULL, names = TRUE) {
 `%excludef%` <- function(vector, pattern) {
   if (is.factor(vector)) {
     lv <- as.integer(vector) %in% stringi::stri_detect_fixed(levels(vector), pattern, opts_fixed = stringi::stri_opts_fixed())
-  }
-  else {
+  } else {
     lv <- stringi::stri_detect_fixed(vector, pattern, opts_fixed = stringi::stri_opts_fixed())
   }
   return(vector[!lv])
@@ -377,21 +372,23 @@ fbind <- function(files) {
   ret <- data.table::data.table()
   for (i in files) {
     if (i %like% "\\.tsv$|\\.csv|\\.txt") {
-      ret <- data.table::fread(i) %>% {
-        data.table::rbindlist(
-          list(., ret),
-          use.names = TRUE, fill = TRUE
-        )
-      }
+      ret <- data.table::fread(i) %>%
+        {
+          data.table::rbindlist(
+            list(., ret),
+            use.names = TRUE, fill = TRUE
+          )
+        }
     }
 
     if (i %like% "\\.rds$|\\.Rds|\\.RDS") {
-      ret <- readRDS(i) %>% {
-        data.table::rbindlist(
-          list(., ret),
-          use.names = TRUE, fill = TRUE
-        )
-      }
+      ret <- readRDS(i) %>%
+        {
+          data.table::rbindlist(
+            list(., ret),
+            use.names = TRUE, fill = TRUE
+          )
+        }
     }
   }
 
@@ -408,9 +405,9 @@ fbind <- function(files) {
 #'
 #' @return A data.table subset of \code{dt} with columns of all \code{NA} or \code{NULL} removed.
 #'
-#' @export withoutna
+#' @export withoutAllNA
 
-withoutna <- function(dt) {
+withoutAllNA <- function(dt) {
   `.` <- NULL
 
   na_col <- lapply(1:length(dt), function(x) {
@@ -425,6 +422,35 @@ withoutna <- function(dt) {
 
   n_col <- ncol(dt)
   dt %<>% .[rowSums(is.na(dt)) != n_col, ]
+
+  return(invisible(dt))
+}
+
+#' Convenience inflix operator to remove any(NA) or any(NULL) columns and rows from a data.table by reference.
+#'
+#' Remove columns from a data table if all values are NA or NULL; useful when subsetting.
+#'
+#' @param dt A data.table.
+#'
+#' @return A data.table subset of \code{dt} with columns of all \code{NA} or \code{NULL} removed.
+#'
+#' @export withoutAnyNA
+
+withoutAnyNA <- function(dt) {
+  dt %<>% stats::na.omit()
+
+  n <- names(dt)
+  for (i in 1:length(dt)) {
+    if ((dt[[i]] %>% is.na() %>% any()) | (dt[[i]] %>% is.null() %>% any())) {
+      print(names(dt)[i])
+      col <- dt %>%
+        names() %>%
+        .[i]
+      dt[, col := NULL,
+        env = list(col = I(col))
+      ]
+    }
+  }
 
   return(invisible(dt))
 }

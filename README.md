@@ -1,5 +1,3 @@
-[![rech.io](https://s3.amazonaws.com/get.rech.io/dt.inflix_build_status.svg)](https://s3.amazonaws.com/get.rech.io/dt.inflix.test.txt) [![rech.io](https://img.shields.io/badge/endpoint.svg?url=https://s3.amazonaws.com/get.rech.io/dt.inflix_coverage.json)](https://s3.amazonaws.com/get.rech.io/dt.inflix_coverage.html) ![](https://img.shields.io/badge/version-0.0.1-blue.svg)
-
 # dt.inflix
 
 Inflix operators for the R package [`data.table`](https://github.com/Rdatatable/data.table)
@@ -11,12 +9,8 @@ Extra inflix operators and helper functions to use with the R package `data.tabl
 ## Installation dependencies and `dt.inflix`
 
 ```sh
-curl -fsSL http://get.rech.io/dt.inflix.sh | sudo sh
+curl -fsSL https://s3.amazonaws.com/get.rech.io/dt.inflix.sh | sudo sh
 ```
-
-### Release
-
-* [Latest](https://s3.amazonaws.com/get.rech.io/dt.inflix_0.0.1.tar.gz)
 
 ## Manifest
 
