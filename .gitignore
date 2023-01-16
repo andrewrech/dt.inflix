@@ -1,3 +1,5 @@
 raw_figures/
 *html
 *docx
+
+.git.nosync
